@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>easy.food</groupId>
+    <artifactId>backend</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>backend</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <docker.image.prefix>easy-food</docker.image.prefix>
+
+        <maven.surefire.version>2.22.2</maven.surefire.version>
+        <javadoc.version>3.0.1</javadoc.version>
+
+        <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
+        <liquibase.core.version>3.8.0</liquibase.core.version>
+        <logback.core.version>1.2.3</logback.core.version>
+        <slf4j.api.version>1.7.25</slf4j.api.version>
+        <io.json-webtoken>0.10.6</io.json-webtoken>
+        <mysql.connector.version>8.0.17</mysql.connector.version>
+        <dockerfile.maven.plugin.version>1.4.10</dockerfile.maven.plugin.version>
+
+        <mockito.version>3.0.0</mockito.version>
+        <junit.version>4.12</junit.version>
+        <power.mock.version>2.0.2</power.mock.version>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${io.json-webtoken}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${io.json-webtoken}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${io.json-webtoken}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-core</artifactId>
+            <version>${power.mock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${power.mock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-easymock</artifactId>
+            <version>${power.mock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.connector.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <forkCount>3</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>-Xmx1024m</argLine>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.version}</version>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <properties>
+                <frontend.url>http://localhost:8080</frontend.url>
+                <datasource.url><![CDATA[jdbc:mysql://easy-food-database:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></datasource.url>
+                <datasource.username>easyfood</datasource.username>
+                <datasource.password>easyfood</datasource.password>
+                <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
+
+                <liquibase.changelog>classpath:config/liquibase/master.xml</liquibase.changelog>
+                <liquibase.url><![CDATA[jdbc:mysql://easy-food-database:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></liquibase.url>
+                <liquibase.user>easyfood</liquibase.user>
+                <liquibase.password>easyfood</liquibase.password>
+                <liquibase.contexts>init</liquibase.contexts>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${dockerfile.maven.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>tag-version</id>
+                                <goals>
+                                    <goal>tag</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${project.version}</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <frontend.url>http://localhost:8080</frontend.url>
+                <datasource.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></datasource.url>
+                <datasource.username>easyfood</datasource.username>
+                <datasource.password>easyfood</datasource.password>
+                <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
+
+                <liquibase.changelog>classpath:config/liquibase/master.xml</liquibase.changelog>
+                <liquibase.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></liquibase.url>
+                <liquibase.user>easyfood</liquibase.user>
+                <liquibase.password>easyfood</liquibase.password>
+                <liquibase.contexts>init</liquibase.contexts>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <frontend.url>http://localhost:8080</frontend.url>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

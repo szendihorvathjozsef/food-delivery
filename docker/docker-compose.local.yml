@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  database:
+    image: mysql:5.7
+    volumes:
+      - /opt/easy-food/database:/var/lib/mysql
+    ports:
+      - 13336:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: easyfood
+      MYSQL_DATABASE: easyfood
+      MYSQL_USER: easyfood
+      MYSQL_PASSWORD: easyfood
+    container_name: easy-food-database
+    networks:
+      easy-food:
+        aliases:
+          - easy-food-database
+
+  backend:
+    image: easy-food/backend:1.0-SNAPSHOT
+    volumes:
+      - /opt/easy-food:/easy-food
+      - /opt/easy-food/logs:/logs
+    ports:
+      - 8081:8081
+    container_name: easy-food-backend
+    networks:
+      easy-food:
+        aliases:
+            - easy-food-backend
+
+networks:
+  easy-food:
