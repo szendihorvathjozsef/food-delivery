@@ -19,6 +19,9 @@
         <maven.surefire.version>2.22.2</maven.surefire.version>
         <javadoc.version>3.0.1</javadoc.version>
 
+        <hibernate.version>5.3.10.Final</hibernate.version>
+        <hibernate.validator.version>6.0.17.Final</hibernate.validator.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
         <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
         <liquibase.core.version>3.8.0</liquibase.core.version>
         <logback.core.version>1.2.3</logback.core.version>
@@ -153,6 +156,24 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.connector.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
         </dependency>
     </dependencies>
 
