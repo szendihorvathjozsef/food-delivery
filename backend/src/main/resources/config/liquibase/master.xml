@@ -3,10 +3,20 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     
-    <changeSet id="database initialization" author="Szendi-Horváth József" context="init">
+    <changeSet
+        id="database initialization"
+        runAlways="false"
+        author="Szendi-Horváth József"
+        context="init"
+    >
         <sqlFile
             dbms="mysql"
             path="changelog/init/authorities.sql"
+            relativeToChangelogFile="true"
+        />
+        <sqlFile
+            dbms="mysql"
+            path="changelog/init/users.sql"
             relativeToChangelogFile="true"
         />
     </changeSet>
