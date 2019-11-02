@@ -30,6 +30,7 @@
         <io.json-webtoken>0.10.6</io.json-webtoken>
         <mysql.connector.version>8.0.17</mysql.connector.version>
         <dockerfile.maven.plugin.version>1.4.10</dockerfile.maven.plugin.version>
+        <zalanod.problem.spring.version>0.25.2</zalanod.problem.spring.version>
 
         <mockito.version>3.0.0</mockito.version>
         <junit.version>4.12</junit.version>
@@ -78,6 +79,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>${zalanod.problem.spring.version}</version>
         </dependency>
 
         <dependency>
@@ -287,15 +294,15 @@
             </activation>
             <properties>
                 <frontend.url>http://localhost:8080</frontend.url>
-                <datasource.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></datasource.url>
-                <datasource.username>easyfood</datasource.username>
-                <datasource.password>easyfood</datasource.password>
+                <datasource.url>jdbc:mysql://localhost:3306/easyfood</datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.password></datasource.password>
                 <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
 
                 <liquibase.changelog>classpath:config/liquibase/master.xml</liquibase.changelog>
-                <liquibase.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></liquibase.url>
-                <liquibase.user>easyfood</liquibase.user>
-                <liquibase.password>easyfood</liquibase.password>
+                <liquibase.url>jdbc:mysql://localhost:3306/easyfood</liquibase.url>
+                <liquibase.user>root</liquibase.user>
+                <liquibase.password></liquibase.password>
                 <liquibase.contexts>init</liquibase.contexts>
             </properties>
         </profile>
