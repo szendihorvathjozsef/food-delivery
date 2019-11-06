@@ -21,6 +21,9 @@ spring:
 frontend:
   url: @frontend.url@
 
+app:
+  name: easyOrder
+
 jwt:
   token:
     secret:
