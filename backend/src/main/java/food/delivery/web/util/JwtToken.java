@@ -1,14 +1,10 @@
 package food.delivery.web.util;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class JwtToken {
-
-    private String jwtToken;
-
-    public JwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
-    }
-
-    public String getJwtToken() {
-        return jwtToken;
-    }
+    private String token;
 }

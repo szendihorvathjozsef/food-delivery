@@ -36,7 +36,7 @@ public class UserController extends BaseController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> list(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -51,7 +51,7 @@ public class UserController extends BaseController {
         );
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User: {}", userDTO);
 
@@ -70,7 +70,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         log.debug("REST request to update User: {}", userDTO);
 

@@ -10,14 +10,24 @@
         context="init"
     >
         <sqlFile
+                dbms="mysql"
+                path="changelog/init/users.sql"
+                relativeToChangelogFile="true"
+        />
+        <sqlFile
             dbms="mysql"
             path="changelog/init/authorities.sql"
             relativeToChangelogFile="true"
         />
         <sqlFile
-            dbms="mysql"
-            path="changelog/init/users.sql"
-            relativeToChangelogFile="true"
+                dbms="mysql"
+                path="changelog/init/items.sql"
+                relativeToChangelogFile="true"
+        />
+        <sqlFile
+                dbms="mysql"
+                path="changelog/init/orders.sql"
+                relativeToChangelogFile="true"
         />
     </changeSet>
     

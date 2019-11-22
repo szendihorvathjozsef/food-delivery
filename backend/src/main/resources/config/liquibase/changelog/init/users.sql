@@ -20,12 +20,11 @@ VALUES (1, 'admin', '$2y$12$ld.Xx04Z/rrqxN389kx.qeQ62j8WVmWgDUuRCjpddc6zzaNXCfcw
        (2, 'user', '$2y$12$ld.Xx04Z/rrqxN389kx.qeQ62j8WVmWgDUuRCjpddc6zzaNXCfcwK', 'Greg', 'User',
         'user@easy-food.local', 'ACTIVE', NULL, NULL);
 
-CREATE TABLE IF NOT EXISTS `easyfood`.`address`
+CREATE TABLE IF NOT EXISTS `easyfood`.`user_address`
 (
     `id`        BIGINT       NOT NULL AUTO_INCREMENT,
     `user_id`   BIGINT       NOT NULL,
-    `country`   VARCHAR(100) NOT NULL,
-    `street`    VARCHAR(150) NOT NULL,
+    `address`   VARCHAR(100) NOT NULL,
     `post_code` INT          NOT NULL,
     `type`      VARCHAR(25)  NOT NULL,
     CONSTRAINT `address_PK` PRIMARY KEY (`id`),
