@@ -9,16 +9,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private TokenProvider tokenProvider;
-    private UserService userService;
 
-    public JwtConfigurer(TokenProvider tokenProvider, UserService userService) {
+    public JwtConfigurer(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
-        this.userService = userService;
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        JwtFilter jwtFilter = new JwtFilter(tokenProvider, userService);
+        JwtFilter jwtFilter = new JwtFilter(tokenProvider);
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

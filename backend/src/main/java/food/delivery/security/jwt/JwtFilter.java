@@ -19,11 +19,9 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private TokenProvider tokenProvider;
-    private UserService userService;
 
-    public JwtFilter(TokenProvider tokenProvider, UserService userService) {
+    public JwtFilter(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
-        this.userService = userService;
     }
 
     @Override
