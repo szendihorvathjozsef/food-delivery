@@ -1,4 +1,4 @@
-package food.delivery.security;
+package food.delivery.util.enums;
 
 public enum Authorities {
     ADMINISTARTOR,

@@ -11,22 +11,33 @@
     >
         <sqlFile
                 dbms="mysql"
-                path="changelog/init/users.sql"
-                relativeToChangelogFile="true"
-        />
-        <sqlFile
-            dbms="mysql"
-            path="changelog/init/authorities.sql"
-            relativeToChangelogFile="true"
-        />
-        <sqlFile
-                dbms="mysql"
-                path="changelog/init/items.sql"
+                path="changelog/init/user.sql"
                 relativeToChangelogFile="true"
         />
         <sqlFile
                 dbms="mysql"
-                path="changelog/init/orders.sql"
+                path="changelog/init/item.sql"
+                relativeToChangelogFile="true"
+        />
+        <sqlFile
+                dbms="mysql"
+                path="changelog/init/order.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="auditing colums for user table" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_001.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="change password hash for default users" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_002.sql"
                 relativeToChangelogFile="true"
         />
     </changeSet>

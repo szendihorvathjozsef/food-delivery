@@ -9,11 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "authorities")
+@Table(name = "authority")
 public class Authority implements Serializable {
 
     private static final Long serialVersionUID = 1L;

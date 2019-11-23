@@ -3,9 +3,8 @@ package food.delivery.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import food.delivery.config.Constants;
-import food.delivery.enums.UserStatus;
+import food.delivery.util.enums.UserStatus;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -23,7 +22,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +58,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.NEED_ACTIVATION;
 
     @Size(max = 20)
@@ -74,7 +74,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "user_authorities",
+        name = "user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
     )

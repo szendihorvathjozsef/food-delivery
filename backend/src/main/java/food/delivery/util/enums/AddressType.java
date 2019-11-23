@@ -1,4 +1,4 @@
-package food.delivery.util;
+package food.delivery.util.enums;
 
 /**
  * @author szendihorvathjozsef

@@ -3,8 +3,9 @@ package food.delivery.services.dto;
 import food.delivery.config.Constants;
 import food.delivery.entities.Authority;
 import food.delivery.entities.User;
-import food.delivery.enums.UserStatus;
+import food.delivery.util.enums.UserStatus;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class UserDTO implements Serializable {
 
     private Long id;

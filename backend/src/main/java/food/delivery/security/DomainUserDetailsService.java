@@ -1,7 +1,8 @@
 package food.delivery.security;
 
 import food.delivery.entities.User;
-import food.delivery.enums.UserStatus;
+import food.delivery.util.enums.UserStatus;
+import food.delivery.exceptions.UserNotActivatedException;
 import food.delivery.repositories.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.getStatus().equals(UserStatus.ACTIVATED)) {
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()

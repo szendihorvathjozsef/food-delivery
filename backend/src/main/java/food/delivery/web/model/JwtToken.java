@@ -1,4 +1,4 @@
-package food.delivery.web.util;
+package food.delivery.web.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

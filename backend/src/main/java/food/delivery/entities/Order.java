@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "orders")
+@Table(name = "order")
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -3,18 +3,17 @@ package food.delivery.services;
 import food.delivery.config.Constants;
 import food.delivery.entities.Authority;
 import food.delivery.entities.User;
-import food.delivery.enums.UserStatus;
+import food.delivery.util.enums.UserStatus;
 import food.delivery.exceptions.EmailAlreadyUsedException;
 import food.delivery.exceptions.InvalidPasswordException;
 import food.delivery.exceptions.LoginAlreadyUsedException;
 import food.delivery.repositories.AuthorityRepository;
 import food.delivery.repositories.UserRepository;
-import food.delivery.security.Authorities;
+import food.delivery.util.Authorities;
 import food.delivery.security.SecurityUtils;
 import food.delivery.services.dto.UserDTO;
 import food.delivery.util.RandomUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,9 +28,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class UserService {
 
-    private final Logger LOG = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
@@ -43,19 +42,19 @@ public class UserService {
     }
 
     public Optional<User> activateRegistration(String key) {
-        LOG.debug("Activating user for activation key {}", key);
+        log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
                 .map(user -> {
                     // activate given user for the registration key.
-                    user.setStatus(UserStatus.ACTIVATED);
+                    user.setStatus(UserStatus.ACTIVE);
                     user.setActivationKey(null);
-                    LOG.debug("Activated user: {}", user);
+                    log.debug("Activated user: {}", user);
                     return user;
                 });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-        LOG.debug("Reset user password for reset key {}", key);
+        log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
                 .map(user -> {
                     user.setPassword(passwordEncoder.encode(newPassword));
@@ -66,7 +65,7 @@ public class UserService {
 
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
-                .filter(user -> user.getStatus().equals(UserStatus.ACTIVATED))
+                .filter(user -> user.getStatus().equals(UserStatus.ACTIVE))
                 .map(user -> {
                     user.setResetKey(RandomUtil.generateResetKey());
                     return user;
@@ -111,12 +110,12 @@ public class UserService {
         }
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        LOG.debug("Created Information for User: {}", newUser);
+        log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
 
     private boolean removeNonActivatedUser(User existingUser){
-        if (existingUser.getStatus().equals(UserStatus.ACTIVATED)) {
+        if (existingUser.getStatus().equals(UserStatus.ACTIVE)) {
             return false;
         }
         userRepository.delete(existingUser);
@@ -130,7 +129,7 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
-        user.setStatus(UserStatus.ACTIVATED);
+        user.setStatus(UserStatus.ACTIVE);
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                     .map(authorityRepository::findById)
@@ -140,7 +139,7 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
-        LOG.debug("Created Information for User: {}", user);
+        log.debug("Created Information for User: {}", user);
         return user;
     }
 
@@ -160,7 +159,7 @@ public class UserService {
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
                     user.setEmail(email.toLowerCase());
-                    LOG.debug("Changed Information for User: {}", user);
+                    log.debug("Changed Information for User: {}", user);
                 });
     }
 
@@ -185,7 +184,7 @@ public class UserService {
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .forEach(managedAuthorities::add);
-                    LOG.debug("Changed Information for User: {}", user);
+                    log.debug("Changed Information for User: {}", user);
                     return user;
                 })
                 .map(UserDTO::new);
@@ -194,7 +193,7 @@ public class UserService {
     public void deleteUser(String LOGin) {
         userRepository.findOneByLogin(LOGin).ifPresent(user -> {
             userRepository.delete(user);
-            LOG.debug("Deleted User: {}", user);
+            log.debug("Deleted User: {}", user);
         });
     }
 
@@ -208,12 +207,13 @@ public class UserService {
                     }
                     String encryptedPassword = passwordEncoder.encode(newPassword);
                     user.setPassword(encryptedPassword);
-                    LOG.debug("Changed password for User: {}", user);
+                    log.debug("Changed password for User: {}", user);
                 });
     }
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+        log.info("PW asdASD123: {}", passwordEncoder.encode("asdASD123"));
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }
 

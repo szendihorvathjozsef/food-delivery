@@ -1,4 +1,4 @@
-package food.delivery.security;
+package food.delivery.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

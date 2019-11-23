@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`item_type`
     CONSTRAINT `item_type_PK` PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `easyfood`.`items`
+CREATE TABLE IF NOT EXISTS `easyfood`.`item`
 (
     `id`      BIGINT       NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(100) NOT NULL UNIQUE,
@@ -31,6 +31,6 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`items_allergen`
     `item_id`    BIGINT NOT NULL,
     `allergen_id` BIGINT NOT NULL,
     CONSTRAINT `items_allergies_PK` PRIMARY KEY (`item_id`, `allergen_id`),
-    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`),
     CONSTRAINT `items_allergies_FK_allergen_id` FOREIGN KEY (`allergen_id`) REFERENCES `allergen` (`id`)
 );

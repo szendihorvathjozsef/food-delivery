@@ -34,6 +34,7 @@ public class UserAddress implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AddressType type;
 
     @ManyToOne

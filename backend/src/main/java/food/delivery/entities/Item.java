@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "items")
+@Table(name = "item")
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,6 +58,6 @@ public class Item implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
-    private Set<Authority> allergens = new HashSet<>();
+    private Set<ItemAllergen> allergens = new HashSet<>();
 
 }

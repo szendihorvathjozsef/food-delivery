@@ -1,6 +1,5 @@
 package food.delivery.security.jwt;
 
-import food.delivery.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
