@@ -41,5 +41,13 @@
                 relativeToChangelogFile="true"
         />
     </changeSet>
+
+    <changeSet id="order status" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_003.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
     
 </databaseChangeLog>

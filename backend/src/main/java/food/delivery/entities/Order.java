@@ -1,10 +1,17 @@
 package food.delivery.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import food.delivery.services.converter.InstantConverter;
+import food.delivery.util.enums.OrderStatus;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +31,29 @@ public class Order implements Serializable {
 
     @Column(name = "total_cost")
     private Double totalCost;
+
+    @NotNull
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.ORDERED;
+
+    @Column(name = "start_time")
+    @Convert(converter = InstantConverter.class)
+    private Instant startTime = Instant.now();
+
+    @Column(name = "start_time")
+    @Convert(converter = InstantConverter.class)
+    private Instant endTime;
+
+    @JsonIgnore
+    @CreatedDate
+    @Column(name = "created_on", updatable = false)
+    private Instant createdOn;
+
+    @JsonIgnore
+    @LastModifiedDate
+    @Column(name = "updated_on")
+    private Instant updatedOn;
 
     @OneToMany(mappedBy = "order")
     @JsonIgnoreProperties("order")
