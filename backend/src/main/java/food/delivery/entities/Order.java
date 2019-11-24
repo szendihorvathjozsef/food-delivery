@@ -41,7 +41,7 @@ public class Order implements Serializable {
     @Convert(converter = InstantConverter.class)
     private Instant startTime = Instant.now();
 
-    @Column(name = "start_time")
+    @Column(name = "end_time")
     @Convert(converter = InstantConverter.class)
     private Instant endTime;
 

@@ -1,6 +1,6 @@
 package food.delivery.services.dto;
 
-import food.delivery.util.AddressType;
+import food.delivery.util.enums.AddressType;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

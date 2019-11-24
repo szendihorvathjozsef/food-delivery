@@ -1,7 +1,7 @@
 package food.delivery.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import food.delivery.util.AddressType;
+import food.delivery.util.enums.AddressType;
 import lombok.Data;
 
 import javax.persistence.*;
