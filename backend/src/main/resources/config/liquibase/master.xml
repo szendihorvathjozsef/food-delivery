@@ -49,5 +49,20 @@
                 relativeToChangelogFile="true"
         />
     </changeSet>
-    
+
+    <changeSet id="coupon and menu" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_004.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="initial datas" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_005.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
 </databaseChangeLog>

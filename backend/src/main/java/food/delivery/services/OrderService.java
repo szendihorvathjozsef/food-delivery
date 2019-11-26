@@ -1,7 +1,9 @@
 package food.delivery.services;
 
+import food.delivery.entities.Order;
 import food.delivery.repositories.OrderItemRepository;
 import food.delivery.repositories.OrderRepository;
+import food.delivery.services.dto.OrderDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,5 +22,10 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
+    }
+
+    public Order createOrder(OrderDTO orderDTO) {
+        Order order = new Order();
+        return order;
     }
 }

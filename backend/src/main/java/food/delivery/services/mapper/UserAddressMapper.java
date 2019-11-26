@@ -8,10 +8,13 @@ import org.mapstruct.Mapping;
 /**
  * @author szendihorvath
  */
-//@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {})
 public interface UserAddressMapper extends EntityMapper<UserAddressDTO, UserAddress> {
 
-    /*UserAddress toEntity(UserAddressDTO userAddressDTO);
+    @Mapping(target = "user", ignore = true)
+    UserAddress toEntity(UserAddressDTO userAddressDTO);
+
+    UserAddressDTO toDto(UserAddress userAddress);
 
     default UserAddress fromId(Long id) {
         if ( id == null ) {
@@ -20,6 +23,6 @@ public interface UserAddressMapper extends EntityMapper<UserAddressDTO, UserAddr
         UserAddress userAddress = new UserAddress();
         userAddress.setId(id);
         return userAddress;
-    }*/
+    }
 
 }

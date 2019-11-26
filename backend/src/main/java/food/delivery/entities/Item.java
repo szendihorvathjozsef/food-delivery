@@ -46,7 +46,7 @@ public class Item implements Serializable {
     private Integer carbs;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_type_id")
+    @JoinColumn(name = "item_type_name")
     private ItemType itemType;
 
     @JsonIgnore
@@ -54,7 +54,7 @@ public class Item implements Serializable {
     @JoinTable(
             name = "items_allergen",
             joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "allergen_id", referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name = "allergen_name", referencedColumnName = "name")}
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)

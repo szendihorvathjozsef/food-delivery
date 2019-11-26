@@ -10,6 +10,7 @@ import food.delivery.services.dto.UserDTO;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.PaginationUtil;
 import food.delivery.util.ResponseUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@Slf4j
 public class UserController extends BaseController {
 
     private final UserService userService;

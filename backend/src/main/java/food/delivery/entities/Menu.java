@@ -1,15 +1,17 @@
 package food.delivery.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import food.delivery.services.converter.InstantConverter;
-import food.delivery.util.enums.OrderStatus;
 import lombok.Data;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
@@ -20,8 +22,8 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(name = "order")
-public class Order implements Serializable {
+@Table(name = "menu")
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,21 +31,23 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "total_cost")
-    private Double totalCost;
-
     @NotNull
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.ORDERED;
+    @Size(min = 4, max = 50)
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
+
+    @Size(max = 250)
+    @Column(name = "description", length = 250)
+    private String description;
+
 
     @Column(name = "start_time")
     @Convert(converter = InstantConverter.class)
-    private Instant start = Instant.now();
+    private Instant startTime = Instant.now();
 
     @Column(name = "end_time")
     @Convert(converter = InstantConverter.class)
-    private Instant end;
+    private Instant endTime;
 
     @JsonIgnore
     @CreatedDate
@@ -55,13 +59,14 @@ public class Order implements Serializable {
     @Column(name = "updated_on")
     private Instant updatedOn;
 
-    @OneToMany(mappedBy = "order")
-    @JsonIgnoreProperties("order")
-    private Set<OrderItem> orders = new HashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("order")
-    private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "menu_item",
+            joinColumns = {@JoinColumn(name = "menu_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "name")}
+    )
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<Item> items = new HashSet<>();
 
 }
