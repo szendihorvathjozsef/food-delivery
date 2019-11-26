@@ -5,6 +5,7 @@ services:
     image: mysql:5.7
     volumes:
       - /opt/easy-food/database:/var/lib/mysql
+      - ./mycustom.cnf:/etc/mysql/conf.d/custom.cnf:ro
     ports:
       - 13336:3306
     environment:

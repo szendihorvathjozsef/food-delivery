@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`coupon`
     `percent`   INT         NOT NULL,
     `type_name` VARCHAR(50) NOT NULL,
     CONSTRAINT `coupon_PK` PRIMARY KEY (`id`),
-    CONSTRAINT `coupon_FK_item_type_name` FOREIGN KEY (`type_name`) REFERENCES `item_type` (`name`)
+    CONSTRAINT `coupon_FK_item_type_name` FOREIGN KEY (`type_name`) REFERENCES `easyfood`.`item_type` (`name`)
 );
 
 CREATE TABLE IF NOT EXISTS `easyfood`.`menu`
@@ -24,6 +24,6 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`menu_item`
     `menu_id` BIGINT NOT NULL,
     `item_id` BIGINT NOT NULL,
     CONSTRAINT `menu_item_PK` PRIMARY KEY (`menu_id`, `item_id`),
-    CONSTRAINT `menu_item_FK_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`),
-    CONSTRAINT `menu_item_FK_item_item` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`)
+    CONSTRAINT `menu_item_FK_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `easyfood`.`menu` (`id`),
+    CONSTRAINT `menu_item_FK_item_item` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`)
 )

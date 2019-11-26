@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`user_address`
     `post_code` INT          NOT NULL,
     `type`      VARCHAR(25)  NOT NULL,
     CONSTRAINT `address_PK` PRIMARY KEY (`id`),
-    CONSTRAINT `address_FK` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+    CONSTRAINT `address_FK` FOREIGN KEY (`user_id`) REFERENCES `easyfood`.`user`(`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `easyfood`.`authority`
@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`user_authority`
     `user_id`        BIGINT      NOT NULL,
     `authority_name` VARCHAR(50) NOT NULL,
     CONSTRAINT `user_authorities_PK` PRIMARY KEY (`user_id`, `authority_name`),
-    CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
-    CONSTRAINT `fk_authority_name` FOREIGN KEY (`authority_name`) REFERENCES `authority`(`name`)
+    CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `easyfood`.`user`(`id`),
+    CONSTRAINT `fk_authority_name` FOREIGN KEY (`authority_name`) REFERENCES `easyfood`.`authority`(`name`)
 );
 
 INSERT INTO `easyfood`.`user_authority` (user_id, authority_name)

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`item`
     `fat`            INT,
     `carbs`          INT,
     CONSTRAINT `items_Pk` PRIMARY KEY (`id`),
-    CONSTRAINT `items_FK_item_type_name` FOREIGN KEY (`item_type_name`) REFERENCES `item_type` (`name`)
+    CONSTRAINT `items_FK_item_type_name` FOREIGN KEY (`item_type_name`) REFERENCES `easyfood`.`item_type`(`name`)
 );
 
 CREATE TABLE IF NOT EXISTS `easyfood`.`allergen`
@@ -29,6 +29,6 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`items_allergen`
     `item_id`       BIGINT NOT NULL,
     `allergen_name` VARCHAR(50) NOT NULL,
     CONSTRAINT `items_allergies_PK` PRIMARY KEY (`item_id`, `allergen_name`),
-    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`),
-    CONSTRAINT `items_allergies_FK_allergen_name` FOREIGN KEY (`allergen_name`) REFERENCES `allergen` (`name`)
+    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`),
+    CONSTRAINT `items_allergies_FK_allergen_name` FOREIGN KEY (`allergen_name`) REFERENCES `easyfood`.`allergen` (`name`)
 );
