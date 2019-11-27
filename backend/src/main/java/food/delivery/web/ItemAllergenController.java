@@ -1,13 +1,14 @@
 package food.delivery.web;
 
 import food.delivery.entities.ItemAllergen;
+import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.ItemAllergenRepository;
 import food.delivery.services.mapper.ItemAllergenMapper;
 import food.delivery.util.HeaderUtil;
-import food.delivery.web.model.AllergenModel;
+import food.delivery.web.model.CreateAllergenModel;
+import food.delivery.web.model.CreateMoreAllergenModel;
+import food.delivery.web.model.DeleteMoreAllergenModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,24 +47,45 @@ public class ItemAllergenController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody AllergenModel allergenModel) throws URISyntaxException {
-        log.debug("REST request to create Allergen: {}", allergenModel);
+    public ResponseEntity<String> create(@Valid @RequestBody CreateAllergenModel createAllergenModel) throws URISyntaxException {
+        log.debug("REST request to create Allergen: {}", createAllergenModel);
 
-        ItemAllergen itemAllergen = itemAllergenMapper.toEntity(allergenModel.getAllergen());
+        ItemAllergen itemAllergen = itemAllergenMapper.toEntity(createAllergenModel.getAllergen());
         itemAllergen = itemAllergenRepository.save(itemAllergen);
         return ResponseEntity.created(new URI("/item-allergens"))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, itemAllergen.getName()))
                 .body(itemAllergenMapper.toDto(itemAllergen));
     }
 
-   /* @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody AllergenModel allergenModel) throws URISyntaxException {
-        log.debug("REST request to create Allergen: {}", allergenModel);
-
-        ItemAllergen itemAllergen = itemAllergenMapper.toEntity(allergenModel.getAllergen());
-        itemAllergen = itemAllergenRepository.save(itemAllergen);
+    @PostMapping("/more")
+    public ResponseEntity<List<String>> createMore(@Valid @RequestBody CreateMoreAllergenModel createAllergenModel) throws URISyntaxException {
+        log.debug("REST request to create Allergen: {}", createAllergenModel);
+        List<ItemAllergen> itemAllergen = itemAllergenMapper.toEntity(createAllergenModel.getAllergens());
+        itemAllergen = itemAllergenRepository.saveAll(itemAllergen);
         return ResponseEntity.created(new URI("/item-allergens"))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, itemAllergen.getName()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, ""))
                 .body(itemAllergenMapper.toDto(itemAllergen));
-    }*/
+    }
+
+    @DeleteMapping("/more")
+    public void deleteMore(@Valid @RequestBody DeleteMoreAllergenModel allergenModel) {
+        log.debug("REST request to delete more Allergen: {}", allergenModel);
+
+        List<ItemAllergen> itemAllergens = itemAllergenMapper.toEntity(allergenModel.getAllergens());
+        itemAllergenRepository.deleteAll(itemAllergens);
+    }
+
+    @DeleteMapping("/{name}")
+    public void delete(@PathVariable String name) {
+        log.debug("REST request to delete Allergen: {}", name);
+        if ( name == null ) {
+            throw new BadRequestAlertException("Invalid name", ENTITY_NAME, "namenull");
+        }
+
+        ItemAllergen itemAllergen = new ItemAllergen();
+        itemAllergen.setName(name);
+
+        itemAllergenRepository.delete(itemAllergen);
+    }
+
 }

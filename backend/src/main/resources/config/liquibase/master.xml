@@ -73,4 +73,12 @@
                 relativeToChangelogFile="true"
         />
     </changeSet>
+
+    <changeSet id="coupon name" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_007.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
 </databaseChangeLog>

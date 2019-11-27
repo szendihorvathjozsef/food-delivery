@@ -3,14 +3,15 @@ package food.delivery.web.model;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author szendihorvathjozsef
  */
 @Data
-public class AllergenModel {
+public class CreateMoreAllergenModel {
 
     @NotNull
-    private String allergen;
+    private List<String> allergens;
 
 }
