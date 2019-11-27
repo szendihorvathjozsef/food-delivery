@@ -21,6 +21,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
+
+
 
 
 
@@ -76,6 +80,8 @@ import { ProfileComponent } from './profile/profile.component';
     MatIconModule,
     MatDividerModule,
     MatListModule,
+    MatCheckboxModule,
+    MatExpansionModule,
     RouterModule.forRoot([
       { path: '' , component: HomeComponent},
       { path: 'food' , component: FoodsComponent},

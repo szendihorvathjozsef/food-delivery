@@ -1,6 +1,19 @@
 # food-delivery
 Food delivery application
 
+**Adattípusok**
+
+* Felhasználói státuszok
+    * ACTIVE
+    * NEED_ACTIVATION
+    * BANNED
+* Authorities = szerepkörök, jelenlegiek
+    * USER
+    * ADMINISTATOR
+* Address : cím
+    * address: maga cím, várossal
+    * postCode: irányítószám
+    * addressType: BILLING | TRANSPORT
 
 A következő végpontok léteznek:  
 
@@ -12,6 +25,18 @@ A következő végpontok léteznek:
   "username": "admin",
   "password": "valami",
   "rememberMe": false
+}
+```
+
+* POST /register: Regisztráció
+```json
+{
+  "login": "",
+  "password": "",
+  "firstName": "",
+  "lastName": "",
+  "email": "",
+  "addresses": []
 }
 ```
 
@@ -62,7 +87,8 @@ Ezt várja a rendszer.
     Példa: /users?page=0&size=20&sort=login,asc
 ```
 
-* GET /users/{login}: login alapján lekérdezni egy felhasználót
+* GET /users/{login}: login alapján lekérdezni egy felhasználót  
+login: felhasználónév
 
 * POST /users: felhasználó készítés  
 Ezt várja a rendszer.
