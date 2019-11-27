@@ -65,12 +65,11 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Locale locale = Locale.ENGLISH;
-        Context context = new Context(locale);
+        Context context = new Context(Locale.forLanguageTag("hu-HU"));
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, mailBaseUrl);
         String content = templateEngine.process(templateName, context);
-        String subject = messageSource.getMessage(titleKey, null, locale);
+        String subject = messageSource.getMessage(titleKey, null, Locale.forLanguageTag("hu-HU"));
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 

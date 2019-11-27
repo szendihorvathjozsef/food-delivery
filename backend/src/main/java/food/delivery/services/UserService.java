@@ -3,13 +3,16 @@ package food.delivery.services;
 import food.delivery.config.Constants;
 import food.delivery.entities.Authority;
 import food.delivery.entities.User;
+import food.delivery.entities.UserAddress;
 import food.delivery.exceptions.EmailAlreadyUsedException;
 import food.delivery.exceptions.InvalidPasswordException;
 import food.delivery.exceptions.LoginAlreadyUsedException;
 import food.delivery.repositories.AuthorityRepository;
+import food.delivery.repositories.UserAddressRepository;
 import food.delivery.repositories.UserRepository;
 import food.delivery.security.SecurityUtils;
 import food.delivery.services.dto.UserDTO;
+import food.delivery.services.mapper.UserAddressMapper;
 import food.delivery.util.RandomUtil;
 import food.delivery.util.enums.Authorities;
 import food.delivery.util.enums.UserStatus;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,11 +38,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
+    private final UserAddressRepository userAddressRepository;
+    private final UserAddressMapper userAddressMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserAddressRepository userAddressRepository, UserAddressMapper userAddressMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userAddressRepository = userAddressRepository;
+        this.userAddressMapper = userAddressMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -109,7 +117,12 @@ public class UserService {
             authorityRepository.findById(Authorities.USER.name()).ifPresent(authorities::add);
         }
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        User result =  userRepository.save(newUser);
+        if (!CollectionUtils.isEmpty(userDTO.getAddresses())) {
+            Set<UserAddress> userAddresses = userAddressMapper.toEntity(userDTO.getAddresses());
+            userAddresses = userAddresses.stream().peek(userAddress -> userAddress.setUser(result)).collect(Collectors.toSet());
+            userAddressRepository.saveAll(userAddresses);
+        }
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -149,8 +162,6 @@ public class UserService {
      * @param firstName first name of user
      * @param lastName last name of user
      * @param email email id of user
-     * @param langKey language key
-     * @param imageUrl image URL of user
      */
     public void updateUser(String firstName, String lastName, String email) {
         SecurityUtils.getCurrentUserLogin()

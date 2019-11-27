@@ -23,6 +23,6 @@ public class UserAddressDTO implements Serializable {
     private Integer postCode;
 
     @NotNull
-    private AddressType addressType;
+    private AddressType type;
 
 }

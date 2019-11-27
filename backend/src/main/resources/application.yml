@@ -6,6 +6,9 @@ server:
     min-response-size: 1024
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
   datasource:
     url: @datasource.url@
     username: @datasource.username@
@@ -26,6 +29,7 @@ spring:
 app:
   name: easyOrder
   frontend-url: @frontend.url@
+  image-path: /images
   mail:
     base-url: http://localhost:${server.port}
     from: easy-order@localhost
