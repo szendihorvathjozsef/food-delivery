@@ -1,15 +1,12 @@
 package food.delivery.repositories;
 
-import food.delivery.entities.Item;
+import food.delivery.entities.UserAddress;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author szendihorvath
+ * @author szendihorvathjozsef
  */
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
-
-    Item findByName(String name);
-
+public interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
 }

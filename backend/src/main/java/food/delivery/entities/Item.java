@@ -45,6 +45,10 @@ public class Item implements Serializable {
     @Column(name = "carbs")
     private Integer carbs;
 
+    @Size(max = 255)
+    @Column(name = "image_name", length = 255)
+    private String imageName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_type_name")
     private ItemType itemType;

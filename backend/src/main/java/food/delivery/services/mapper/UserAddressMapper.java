@@ -5,6 +5,8 @@ import food.delivery.services.dto.UserAddressDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Set;
+
 /**
  * @author szendihorvath
  */
@@ -15,6 +17,10 @@ public interface UserAddressMapper extends EntityMapper<UserAddressDTO, UserAddr
     UserAddress toEntity(UserAddressDTO userAddressDTO);
 
     UserAddressDTO toDto(UserAddress userAddress);
+
+    Set<UserAddress> toEntity(Set<UserAddressDTO> userAddressDTOS);
+
+    Set<UserAddressDTO> toDto(Set<UserAddress> userAddresses);
 
     default UserAddress fromId(Long id) {
         if ( id == null ) {

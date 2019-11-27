@@ -23,7 +23,8 @@ services:
     image: easy-food/backend:1.0-SNAPSHOT
     volumes:
       - /opt/easy-food:/easy-food
-      - /opt/easy-food/logs:/logs
+      - /opt/easy-food/logs:/logs,
+      - /opt/easy-food/images:/images
     ports:
       - 8081:8081
     container_name: easy-food-backend

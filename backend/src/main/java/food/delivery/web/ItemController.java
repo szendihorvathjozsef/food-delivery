@@ -3,18 +3,27 @@ package food.delivery.web;
 import food.delivery.entities.Item;
 import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.ItemRepository;
+import food.delivery.services.StorageService;
 import food.delivery.services.dto.ItemDTO;
 import food.delivery.services.mapper.ItemMapper;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +39,15 @@ public class ItemController extends BaseController {
 
     private final ItemMapper itemMapper;
     private final ItemRepository itemRepository;
+    private final StorageService storageService;
 
     public ItemController(
             ItemMapper itemMapper,
-            ItemRepository itemRepository
-    ) {
+            ItemRepository itemRepository,
+            StorageService storageService) {
         this.itemMapper = itemMapper;
         this.itemRepository = itemRepository;
+        this.storageService = storageService;
     }
 
     @GetMapping
@@ -61,7 +72,9 @@ public class ItemController extends BaseController {
             throw new BadRequestAlertException("A new item cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
+
         Item itemEntity = itemMapper.toEntity(item);
+        itemEntity.setImageName("");
         itemEntity = itemRepository.save(itemEntity);
         ItemDTO result = itemMapper.toDto(itemEntity);
         return ResponseEntity.created(new URI("/items/" + result.getId()))
@@ -86,6 +99,34 @@ public class ItemController extends BaseController {
                         item.getId().toString()
                 ))
                 .body(result);
+    }
+
+    @PostMapping("/image")
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("itemName") String itemName) {
+        Item item = itemRepository.findByName(itemName);
+        if ( item == null ) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idinvalid");
+        }
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String newName = MessageFormat.format(
+                "{0}-{1}.{2}",
+                RandomStringUtils.randomAlphabetic(8),
+                LocalDateTime.now().format(formatter),
+                extension
+        );
+
+        item.setImageName(newName);
+        itemRepository.save(item);
+        storageService.store(file, newName);
+    }
+
+    @GetMapping("/image/{filename:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @DeleteMapping("/{id}")

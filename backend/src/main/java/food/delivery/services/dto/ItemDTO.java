@@ -29,6 +29,8 @@ public class ItemDTO {
 
     private Integer carbs;
 
+    private String imageName;
+
     private String itemType;
 
     private Set<String> allergens;
