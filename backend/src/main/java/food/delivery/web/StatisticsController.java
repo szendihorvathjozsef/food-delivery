@@ -33,7 +33,7 @@ public class StatisticsController extends BaseController {
     // mennyi termék egy napra
     // kettő időpont között mennyi volt a bevétel
 
-    @GetMapping("/for-day/{date}")
+    @GetMapping("/day/{date}")
     public void getUsedItemForDay(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
@@ -43,7 +43,7 @@ public class StatisticsController extends BaseController {
         statistics.forEach(System.out::println);
     }
 
-    @GetMapping("/{startDate}/{endDate}")
+    @GetMapping("/between/{startDate}/{endDate}")
     public void getIncome(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
 
     }
