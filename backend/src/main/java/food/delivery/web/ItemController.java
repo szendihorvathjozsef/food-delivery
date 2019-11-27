@@ -1,19 +1,15 @@
 package food.delivery.web;
 
 import food.delivery.entities.Item;
-import food.delivery.entities.ItemAllergen;
 import food.delivery.exceptions.BadRequestAlertException;
-import food.delivery.repositories.ItemAllergenRepository;
 import food.delivery.repositories.ItemRepository;
 import food.delivery.services.dto.ItemDTO;
-import food.delivery.services.mapper.ItemAllergenMapper;
 import food.delivery.services.mapper.ItemMapper;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,7 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author szendihorvathjozsef
@@ -59,36 +54,36 @@ public class ItemController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) throws URISyntaxException {
-        log.debug("REST request to save Item: {}", itemDTO);
+    public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO item) throws URISyntaxException {
+        log.debug("REST request to save Item: {}", item);
 
-        if ( itemDTO.getId() != null ) {
+        if ( item.getId() != null ) {
             throw new BadRequestAlertException("A new item cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Item item = itemMapper.toEntity(itemDTO);
-        item = itemRepository.save(item);
-        ItemDTO result = itemMapper.toDto(item);
+        Item itemEntity = itemMapper.toEntity(item);
+        itemEntity = itemRepository.save(itemEntity);
+        ItemDTO result = itemMapper.toDto(itemEntity);
         return ResponseEntity.created(new URI("/items/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
 
     @PutMapping
-    public ResponseEntity<ItemDTO> update(@Valid @RequestBody ItemDTO itemDTO) throws URISyntaxException {
-        log.debug("REST request to update Item : {}", itemDTO);
-        if (itemDTO.getId() == null) {
+    public ResponseEntity<ItemDTO> update(@Valid @RequestBody ItemDTO item) throws URISyntaxException {
+        log.debug("REST request to update Item : {}", item);
+        if (item.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Item item = itemMapper.toEntity(itemDTO);
-        item = itemRepository.save(item);
-        ItemDTO result = itemMapper.toDto(item);
+        Item itemEntity = itemMapper.toEntity(item);
+        itemEntity = itemRepository.save(itemEntity);
+        ItemDTO result = itemMapper.toDto(itemEntity);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(
                         applicationName,
                         true,
                         ENTITY_NAME,
-                        itemDTO.getId().toString()
+                        item.getId().toString()
                 ))
                 .body(result);
     }

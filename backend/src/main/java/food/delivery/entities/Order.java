@@ -55,11 +55,11 @@ public class Order implements Serializable {
     @Column(name = "updated_on")
     private Instant updatedOn;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     @JsonIgnoreProperties("order")
     private Set<OrderItem> orders = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {})
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("order")
     private User user;

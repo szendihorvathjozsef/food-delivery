@@ -39,3 +39,5 @@ jwt:
     expire-length:
       default: 7200
       remember-me: 1296000
+
+debug: true

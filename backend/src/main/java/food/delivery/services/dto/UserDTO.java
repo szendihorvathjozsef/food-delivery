@@ -4,6 +4,7 @@ import food.delivery.config.Constants;
 import food.delivery.entities.Authority;
 import food.delivery.entities.User;
 import food.delivery.util.enums.UserStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO implements Serializable {
 
     private Long id;
@@ -37,13 +39,7 @@ public class UserDTO implements Serializable {
     @Size(min = 5, max = 254)
     private String email;
 
-    @Size(max = 256)
-    private String imageUrl;
-
     private UserStatus status;
-
-    @Size(min = 2, max = 6)
-    private String langKey;
 
     private String createdBy;
 

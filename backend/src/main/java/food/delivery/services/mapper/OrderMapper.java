@@ -18,7 +18,11 @@ import java.util.TimeZone;
 @Mapper(componentModel = "spring", uses = {OrderItemMapper.class, UserMapper.class})
 public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
 
-    Order toEntity(OrderDTO orderDTO, @Context TimeZone timeZone);
+    @Mappings({
+            @Mapping(target = "start", source = "startTime"),
+            @Mapping(target = "end", source = "endTime")
+    })
+    Order toEntity(OrderDTO orderDTO);
 
     @Mappings({
             @Mapping(target = "startTime", source = "start"),
@@ -38,5 +42,13 @@ public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
 
     default LocalDateTime fromInstant(Instant instant, @Context TimeZone timeZone) {
         return instant == null ? null : LocalDateTime.ofInstant(instant, timeZone.toZoneId());
+    }
+
+    default Instant fromLocaleDateTime(LocalDateTime localDateTime) {
+        if ( localDateTime == null ) {
+            return null;
+        }
+
+        return localDateTime.toInstant(ZoneOffset.UTC);
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import food.delivery.entities.OrderItem;
 import food.delivery.util.enums.OrderStatus;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -14,13 +15,13 @@ import java.util.Set;
  * @author szendihorvath
  */
 @Data
+@ToString
 public class OrderDTO {
 
     private Long id;
 
     private Double totalCost;
 
-    @NotNull
     private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -33,7 +34,7 @@ public class OrderDTO {
 
     private Instant updatedOn;
 
-    private Set<OrderItem> orders;
+    private Set<OrderItemDTO> orders;
 
     private UserDTO user;
 

@@ -28,7 +28,7 @@ public class AuthenticationController extends BaseController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/authentication")
     public ResponseEntity<JwtToken> authenticate(@Valid @RequestBody LoginModel loginModel) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
