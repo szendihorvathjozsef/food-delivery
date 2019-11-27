@@ -1,9 +1,9 @@
 export interface Food {
-  id: string;
+  id: number;
   picture: string;
   name: string;
   price: number;
-  allergens: { allergen: string, isConatin: boolean}[];
+  allergens: string[];
   kcal: number;
   protein: number;
   fat: number;

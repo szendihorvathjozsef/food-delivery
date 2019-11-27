@@ -1,6 +1,33 @@
-.card {
-    width: 30%;
-    margin: auto;
-    margin-top: 10%;
-    min-width: 400px;
+.register-card {
+  width: 30%;
+  margin: auto;
+  margin-top: 5%;
+}
+mat-card-title{
+  text-align: center;
+}
+
+.register-input {
+  width: 70%;
+  padding: 1%;
+  margin-left: 15%;
+}
+
+.register-input-two {
+  width: 70%;
+  float: left;
+  margin-left: 15%;
+}
+.register-input-two mat-form-field {
+  width: 48%;
+  float: left;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.mat-raised-button {
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }

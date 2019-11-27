@@ -36,13 +36,13 @@ export class OrderService {
 
     deleteOrderItem(index){
         this.itemCount-= this.orderItems[index].quantity;
-        this.totalCost -= (this.orderItems[index].quantity * this.orderItems[index].price); 
+        this.totalCost -= (this.orderItems[index].quantity * this.orderItems[index].price);
         this.itemCountListener.next(this.itemCount);
         this.orderItems.splice(index,1);
         this.itemEmptyListener.next({isEmpty: this.isOrderItemEmpty(), totalCost: this.totalCost });
     }
 
-    findOrderItemById(id: string): number {
+    findOrderItemById(id: number): number {
         let i = 0;
         let index = -1;
         this.orderItems.forEach(element => {
@@ -71,7 +71,7 @@ export class OrderService {
         return total;
     }
 
-    changeQuantity(quantity:number,id:string){
+    changeQuantity(quantity:number,id:number){
         const itemIndex: number = this.findOrderItemById(id);
         this.itemCount += (quantity - this.orderItems[itemIndex].quantity);
         this.orderItems[itemIndex].quantity = quantity;

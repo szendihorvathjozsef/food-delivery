@@ -22,7 +22,7 @@ export class OrderTableComponent implements OnInit {
     this.dataSource = this.orderService.getOrderItems();
     if(this.dataSource.length == 0){
       this.dataSource.push({
-         id: "noItemInCart", name: "There Is No Item In Your Cart", quantity: NaN, price: NaN
+         id: null, name: "There Is No Item In Your Cart", quantity: NaN, price: NaN
       });
     }
   }
@@ -33,15 +33,15 @@ export class OrderTableComponent implements OnInit {
     }
   }
 
-  removeItem(id:string){
-    if(id != "noItemInCart"){
+  removeItem(id:number){
+    if(id != null){
       const orderIndex: number = this.orderService.findOrderItemById(id);
-  
+
       if(orderIndex != -1){
-        
+
         if(this.dataSource.length == 0){
           this.dataSource.push({
-             id: "noItemInCart", name: "There Is No Item In Your Cart", quantity: NaN, price: NaN
+             id: null, name: "There Is No Item In Your Cart", quantity: NaN, price: NaN
           });
         } else {
           this.dataSource.splice(orderIndex,1);
@@ -52,7 +52,7 @@ export class OrderTableComponent implements OnInit {
     }
   }
 
-  quantityChange(quantity:number, id:string){
+  quantityChange(quantity:number, id:number){
     this.orderService.changeQuantity(quantity,id);
   }
 

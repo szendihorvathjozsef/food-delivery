@@ -1,6 +1,24 @@
-mdb-card {
-    width: 30%;
-    margin: auto;
-    margin-top: 10%;
-    min-width: 400px;
+.login-card {
+  width: 30%;
+  margin: auto;
+  margin-top: 15%;
+}
+mat-card-title{
+  text-align: center;
+}
+
+.login-input {
+  width: 70%;
+  padding: 1%;
+  margin-left: 15%;
+}
+
+.mat-raised-button {
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+mat-checkbox {
+  margin: auto;
 }
