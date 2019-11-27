@@ -2,6 +2,7 @@ package food.delivery.services.mapper;
 
 import food.delivery.entities.Order;
 import food.delivery.services.dto.OrderDTO;
+import org.apache.tomcat.jni.Local;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,7 +32,7 @@ public interface OrderMapper extends EntityMapper<OrderDTO, Order> {
     OrderDTO toDto(Order order, @Context TimeZone timeZone);
 
     default Order fromId(Long id) {
-        if ( id == null ) {
+        if (id == null) {
             return null;
         }
 

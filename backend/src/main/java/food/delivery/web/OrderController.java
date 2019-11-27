@@ -1,9 +1,13 @@
 package food.delivery.web;
 
 import food.delivery.entities.Order;
+import food.delivery.entities.OrderItem;
 import food.delivery.exceptions.BadRequestAlertException;
+import food.delivery.repositories.OrderItemRepository;
 import food.delivery.repositories.OrderRepository;
 import food.delivery.services.dto.OrderDTO;
+import food.delivery.services.dto.OrderItemDTO;
+import food.delivery.services.mapper.OrderItemMapper;
 import food.delivery.services.mapper.OrderMapper;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.ResponseUtil;
@@ -15,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author szendihorvathjozsef
@@ -28,11 +35,20 @@ public class OrderController extends BaseController {
 
     private static final String ENTITY_NAME = "order";
 
+    private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
 
-    public OrderController(OrderRepository orderRepository, OrderMapper orderMapper) {
+    public OrderController(
+            OrderItemRepository orderItemRepository,
+            OrderRepository orderRepository,
+            OrderItemMapper orderItemMapper,
+            OrderMapper orderMapper
+    ) {
+        this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
+        this.orderItemMapper = orderItemMapper;
         this.orderMapper = orderMapper;
     }
 
@@ -59,8 +75,12 @@ public class OrderController extends BaseController {
         }
 
         Order orderEntity = orderMapper.toEntity(order);
-        log.info("DTO: {}", order);
-        log.info("Entity: {}", orderEntity);
+        Set<OrderItem> orderItems = orderItemMapper.toEntity(order.getOrders());
+        final Order finalEntity = orderEntity;
+        orderItems = orderItems.stream().peek(orderItem -> orderItem.setOrder(finalEntity)).collect(Collectors.toSet());
+        orderEntity.setOrders(orderItems);
+
+        orderItemRepository.saveAll(orderItems);
         orderEntity = orderRepository.save(orderEntity);
         OrderDTO result = orderMapper.toDto(orderEntity);
         return ResponseEntity.created(new URI("/orders/" + result.getId()))

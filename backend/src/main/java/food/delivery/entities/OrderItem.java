@@ -1,5 +1,6 @@
 package food.delivery.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,8 +20,9 @@ public class OrderItem implements Serializable {
     @Column
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonIgnoreProperties("orders")
     private Order order;
 
     @ManyToOne

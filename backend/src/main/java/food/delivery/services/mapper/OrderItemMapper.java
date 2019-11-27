@@ -5,6 +5,8 @@ import food.delivery.services.dto.OrderItemDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Set;
+
 /**
  * @author szendihorvathjozsef
  */
@@ -15,6 +17,10 @@ public interface OrderItemMapper extends EntityMapper<OrderItemDTO, food.deliver
 
     @Mapping(target = "order", ignore = true)
     OrderItemDTO toDto(OrderItem orderItem);
+
+    Set<OrderItem> toEntity(Set<OrderItemDTO> orderItemDTOS);
+
+    Set<OrderItemDTO> toDto(Set<OrderItem> orderItems);
 
     default OrderItem fromId(Long id) {
         if ( id == null ) {

@@ -23,7 +23,6 @@ spring:
     username:
     password:
 
-
 app:
   name: easyOrder
   frontend-url: @frontend.url@
@@ -39,5 +38,3 @@ jwt:
     expire-length:
       default: 7200
       remember-me: 1296000
-
-debug: true
