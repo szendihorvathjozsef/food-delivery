@@ -53,8 +53,8 @@ public class ItemController extends BaseController {
     @GetMapping
     public ResponseEntity<List<ItemDTO>> list() {
         log.debug("REST request to get all Order");
-        List<Item> orders = itemRepository.findAll();
-        return new ResponseEntity<>(itemMapper.toDto(orders), HttpStatus.OK);
+        List<Item> items = itemRepository.findAll();
+        return new ResponseEntity<>(itemMapper.toDto(items), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -135,10 +135,10 @@ public class ItemController extends BaseController {
         itemRepository.deleteById(id);
         return ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(
-                                applicationName,
-                                true,
-                                ENTITY_NAME,
-                                id.toString()
+                        applicationName,
+                        true,
+                        ENTITY_NAME,
+                        id.toString()
                 ))
                 .build();
     }
