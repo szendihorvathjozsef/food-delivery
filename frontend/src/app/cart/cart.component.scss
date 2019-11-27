@@ -1,0 +1,47 @@
+.cart-items {
+    width: 75%;
+    margin: auto;
+    margin-top: 10%;
+    background-color: rgba(136, 136, 136, 0.37);
+    color: white;
+}
+
+.removeItemButton {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    color: white;
+}
+
+mat-horizontal-stepper {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
+
+.next-prev-buttons button {
+    display: inline;
+}
+
+.empty-cart{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+.empty-cart img{
+    width: 50%;
+    display: block;
+    margin: auto;
+}
+
+.order-price-details {
+    display: block;
+    width: 20%;
+    margin: auto;
+    margin-right: 0%;
+}

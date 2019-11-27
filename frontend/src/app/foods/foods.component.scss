@@ -1,0 +1,38 @@
+.foods{
+  width: 75%;
+  margin: auto;
+}
+
+.card {
+  min-width: 300px;
+  float: left;
+  width: 21%;
+  margin: 1%;
+  
+  display: flex;
+}
+
+.card img{
+  height: 250px;
+  width: 300px;
+}
+
+
+.card .btn {
+  float: left;
+  margin: 0.5%;
+}
+
+.card .def-number-input .quantity {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  width: 40%;
+}
+
+.bottom-details {
+  display: flex;
+}
+
+.nav a{
+  color: white;
+}

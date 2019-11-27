@@ -1,0 +1,150 @@
+<form class="example-form" #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <mat-horizontal-stepper #stepper>
+    <!-- Mat Stepper - Order Details -->
+    <mat-step>
+      <ng-template matStepLabel>Order Items</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <!-- Order Table -->
+
+          <div class="not-empty-cart" *ngIf="!isEmpty">
+            <app-order-table></app-order-table>
+            <br>
+            <mat-card class="order-price-details">
+              <mat-card-content>
+                <div>
+                  <p>Net Cost: {{ (totalCost - (totalCost * 0.27)) | currency:'HUF'}} </p>
+                  <p>Tax: {{ (totalCost * 0.27) | currency:'HUF'}} </p>
+                  <p>Total Cost: {{totalCost | currency:'HUF'}} </p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+
+          <div class="empty-cart" *ngIf="isEmpty">
+            <img src="../assets/empty_cart.png" alt="">
+            <h2>Cart is empty</h2>
+          </div>
+
+
+
+          <!-- Step to next mat-step-->
+          <p></p>
+          <div>
+            <button mat-button matStepperNext [disabled]="isEmpty">Next</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <!-- Mat Stepper - Order Verification -->
+    <mat-step>
+      <ng-template matStepLabel>Order Details</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <!-- First name, Last name Table-->
+          <table class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="First name" name="firstName" [(ngModel)]="firstName" required>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Last name" name="lastName" [(ngModel)]="lastName" required>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Adress -->
+          <p>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Address" name="adress" [(ngModel)]="adress" required>
+            </mat-form-field>
+          </p>
+
+          <!-- Adress - City State PostCode -->
+          <table class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <!-- City -->
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="City" name="city" [(ngModel)]="city" required>
+                </mat-form-field>
+              </td>
+              <td>
+                <!-- State -->
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="State" name="state" [(ngModel)]="state" required>
+                </mat-form-field>
+              </td>
+              <td>
+                <!-- Post Code -->
+                <mat-form-field class="example-full-width">
+                  <input matInput #postalCode maxlength="4" placeholder="Postal Code" name="postCode" [(ngModel)]="postCode" required
+                    minlength="4">
+                  <mat-hint align="end">{{postalCode.value.length}} / 4</mat-hint>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+          <p>
+            <mat-form-field>
+              <mat-label>Payment Method</mat-label>
+              <mat-select name="paymentMethod" [(ngModel)]="paymentMethod" required>
+                <mat-option [value]="method" *ngFor="let method of paymentMethods">{{ method }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field>
+              <input matInput placeholder="Phone number" name="phoneNumber" [(ngModel)]="phoneNumber" required>
+            </mat-form-field>
+          </p>
+
+
+          <!-- Prev Next Buttons -->
+          <div class="next-prev-buttons">
+            <button mat-button matStepperPrevious>Previous</button>
+            <button mat-button matStepperNext [disabled]="form.invalid">Next</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <!-- Mat Stepper - Payment -->
+    <mat-step>
+      <ng-template matStepLabel>Verify</ng-template>
+      <mat-card>
+        <mat-card-content>
+          <h3>Order Details</h3>
+          <mat-divider></mat-divider>
+          <mat-card>
+            <mat-card-content>
+                <h6><strong>Name: </strong>{{ firstName + " " + lastName }}</h6>
+                <h6><strong>Adress: </strong>{{ postCode + ", " + state + ", " + city + ", " + adress }}</h6>
+                <h6><strong>Payment Method: </strong>{{ paymentMethod }}</h6>
+                <h6><strong>Phone Number: </strong>{{ phoneNumber }}</h6>
+            </mat-card-content>
+          </mat-card>
+          <br>
+          <mat-card>
+              <mat-card-content>
+                <h5><strong>Total Cost: </strong>{{ phoneNumber }}</h5>
+              </mat-card-content>
+            </mat-card>
+          
+          <div>
+            <button mat-button matStepperPrevious>Previous</button>
+            <button mat-button type="submit" color="primary">Submit</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+  </mat-horizontal-stepper>
+</form>

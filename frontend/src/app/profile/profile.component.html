@@ -1,0 +1,88 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            {{ username }}
+        </mat-card-title>
+        <mat-card-subtitle>
+            User
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="adress">
+            <h5><strong>
+                    <mat-icon>home</mat-icon>Default adress:
+                </strong>
+            </h5>
+            <!-- Adress -->
+            <!-- Not Editable -->
+            <div *ngFor="let item of adressData">
+                <div (dblclick)="doubleClick(item.name)" *ngIf="editMode != item.name"><strong>
+                        <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
+                    </strong> {{ item.value }}
+                </div>
+                <!-- Editable -->
+                <div (keyup.enter)="doubleClick(none)" *ngIf="editMode == item.name"><strong>
+                        <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
+                    </strong>
+                    <mat-form-field class="example-full-width">
+                        <input matInput maxlength="4" [value]="item.value">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <div class="adress">
+            <h5><strong>
+                    <mat-icon>person_pin</mat-icon>User informations:
+                </strong>
+            </h5>
+            <!-- Contacts -->
+            <!-- Not Editable -->
+            <div *ngFor="let item of contactsData">
+                <div (dblclick)="doubleClick(item.name)" *ngIf="editMode != item.name"><strong>
+                        <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
+                    </strong> {{ item.value }}
+                </div>
+                <!-- Editable -->
+                <div (keyup.enter)="doubleClick(none)" *ngIf="editMode == item.name"><strong>
+                        <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
+                    </strong>
+                    <mat-form-field class="example-full-width">
+                        <input matInput maxlength="4" [value]="item.value">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <!-- Change Password -->
+        <div class="adress">
+            <h5><strong>
+                    <mat-icon>lock</mat-icon>Change Password:
+                </strong>
+            </h5>
+            <form (ngSubmit)="changePassword(form)" #form="ngForm">
+                <mat-form-field class="example-full-width">
+                    <input matInput maxlength="4" placeholder="Old Password" name="oldPassword" [(ngModel)]="oldPassword"
+                        required>
+                </mat-form-field>
+                <br><br>
+                <mat-form-field class="example-full-width">
+                    <input matInput maxlength="4" placeholder=" New Password" name="newPassword" [(ngModel)]="newPassword"
+                        required>
+                </mat-form-field>
+                <br><br>
+                <mat-form-field class="example-full-width">
+                    <input matInput maxlength="4" placeholder="Verify New Password" name="newPasswordverify"
+                        [(ngModel)]="newPasswordverify" required>
+                </mat-form-field>
+                <br><br>
+                <button mat-button type="submit" color="primary">Change</button>
+            </form>
+
+        </div>
+    </mat-card-content>
+</mat-card>

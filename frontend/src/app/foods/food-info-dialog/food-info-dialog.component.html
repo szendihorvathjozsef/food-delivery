@@ -1,0 +1,46 @@
+
+<mat-dialog-content>
+    <div class="foodContent">
+      <div class="foodContent-header">
+        <h2 mat-dialog-title>{{food.name}}</h2><h5><b>Content in 100 gramms / milliliter</b></h5>
+      </div>
+        <br>
+        <div class="progress">
+                <div class="progress-bar" role="progressbar" [style.width.%]="avrageKcal" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{food.kcal}}kcal</div>
+        </div>
+        <br>
+        <div class="progress">
+            <div class="progress-bar bg-info" role="progressbar" [style.width.%]="food.protein" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Protein {{food.protein}}g</div>
+        </div>
+        <br>
+        <div class="progress">
+            <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="food.fat" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">Fat {{food.fat}}g</div>
+        </div>
+        <br>
+        <div class="progress">
+            <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="food.carbs" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">Carbs {{food.carbs}}g</div>
+        </div>
+  </div>
+
+
+      <table class="table">
+        <thead class="black white-text">
+          <tr>
+            <th scope="col">Allergen</th>
+            <th scope="col">Is Contain</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let allergen of food.allergens">
+            <th>{{allergen.allergen}}</th>
+            <td>
+              <i class="fas fa-minus-circle" *ngIf="allergen.isConatin"></i>
+              <i class="fas fa-minus-circle" *ngIf="!allergen.isConatin"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,33 @@
+<mat-toolbar color="primary">
+    <span>EasyOrder</span>
+
+    <div class="leftMenuBar">
+        <button mat-button routerLink="/">Home</button>
+        <button mat-button routerLink="/food">Foods</button>
+        <button mat-button routerLink="/profile">Profile</button>
+    </div>
+
+    <span class="spacer"></span>
+
+    <div class="rightMenuBar">
+        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent">
+            <i class="fas fa-shopping-cart"></i>
+            Cart
+        </button>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item routerLink="/login">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Login</span>
+                </button>
+                <button mat-menu-item routerLink="/register">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Register</span>
+                </button>
+        </mat-menu>
+    </div>
+
+</mat-toolbar>
