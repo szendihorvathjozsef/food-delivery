@@ -1,0 +1,31 @@
+mat-card {
+    width: 40%;
+    margin: auto; 
+}
+
+.adress {
+    width: 100%;
+    margin: auto;
+}
+.adress h5{
+    font-weight: bold;
+}
+.adress div{
+    vertical-align: middle;
+    font-size: 16px;
+    padding: 2px;
+    line-height: 19px;
+    margin: 0px;
+}
+
+.adress mat-icon {
+    position: relative;
+    /* Adjust these values accordingly */
+    top: 4px;
+    left: -5px;
+    padding: 2px;
+}
+
+mat-form-field {
+    height: 15px;
+}

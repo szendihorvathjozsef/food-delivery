@@ -1,58 +1,33 @@
-<html lang="en" class="full-height">
+<mat-toolbar color="primary">
+    <span>EasyOrder</span>
 
-<!--Main Navigation-->
-<header>
-
-  <nav class="navbar navbar-expand-lg navbar-dark black">
-    <div class="container">
-      <a class="navbar-brand" href="#"><strong><i class="fas fa-utensils"></i> EasyOrder</strong></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Foods</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Daily Actions</a>
-          </li>
-        </ul>
-
-        <!-- Left Side-->
-        <ul class="navbar-nav ml-auto nav-flex-icons">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Signup</a>
-          </li>
-        </ul>
-
-
-
-      </div>
+    <div class="leftMenuBar">
+        <button mat-button routerLink="/">Home</button>
+        <button mat-button routerLink="/food">Foods</button>
+        <button mat-button routerLink="/profile">Profile</button>
     </div>
-  </nav>
 
-  <div class="view intro-2">
-    <div class="full-bg-img">
-      <div class="mask rgba-black-strong flex-center">
-        <div class="container">
-          <div class="white-text text-center wow fadeInUp">
-            <h2>This Navbar isn't fixed</h2>
-            <h5>When you scroll down it will disappear</h5>
-            <br>
-            <p>Full page intro with background image will be always displayed in full screen mode, regardless
-              of device </p>
-          </div>
-        </div>
-      </div>
+    <span class="spacer"></span>
+
+    <div class="rightMenuBar">
+        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent">
+            <i class="fas fa-shopping-cart"></i>
+            Cart
+        </button>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item routerLink="/login">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Login</span>
+                </button>
+                <button mat-menu-item routerLink="/register">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Register</span>
+                </button>
+        </mat-menu>
     </div>
-  </div>
 
-</header>
+</mat-toolbar>

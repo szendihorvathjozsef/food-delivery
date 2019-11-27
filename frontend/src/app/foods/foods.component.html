@@ -1,24 +1,9 @@
-<div class="foods">
+<mat-tab-group>
+  <mat-tab [label]="type" *ngFor="let type of itemTypes"> 
+    <div *ngFor="let food of this.foods">
+      <app-food *ngIf="food.foodType == type" [food]="food"></app-food>
+    </div>
+  </mat-tab>
+</mat-tab-group>
 
-<!-- Card -->
-<div class="card">
-
-  <!-- Card image -->
-  <img class="card-img-top" src="https://cdn.pixabay.com/photo/2016/12/26/17/28/food-1932466_960_720.jpg" alt="Card image cap">
-
-  <!-- Card content -->
-  <div class="card-body">
-
-    <!-- Title -->
-    <h4 class="card-title"><a>Card title</a></h4>
-    <!-- Text -->
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <!-- Button -->
-    <a href="#" class="btn btn-primary">Button</a>
-
-  </div>
-
-</div>
-<!-- Card -->
-
-</div>
+    
