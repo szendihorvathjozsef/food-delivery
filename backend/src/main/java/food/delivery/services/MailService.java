@@ -31,7 +31,7 @@ public class MailService {
     private final MessageSource messageSource;
     private final SpringTemplateEngine templateEngine;
 
-    @Value("${app.mail.base-url}")
+    @Value("${app.frontend-url}")
     private String mailBaseUrl;
 
     @Value("${app.mail.from}")
@@ -65,11 +65,11 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Context context = new Context(Locale.forLanguageTag("hu-HU"));
+        Context context = new Context(Locale.forLanguageTag("hu"));
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, mailBaseUrl);
         String content = templateEngine.process(templateName, context);
-        String subject = messageSource.getMessage(titleKey, null, Locale.forLanguageTag("hu-HU"));
+        String subject = messageSource.getMessage(titleKey, null, Locale.forLanguageTag("hu"));
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 

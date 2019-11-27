@@ -6,6 +6,7 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -94,7 +95,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/activate").permitAll()
             .antMatchers("/account/reset-password/init").permitAll()
             .antMatchers("/account/reset-password/finish").permitAll()
-            .antMatchers("/**").authenticated()
+            .antMatchers(HttpMethod.POST, "/orders").permitAll()
+            .antMatchers("/account").authenticated()
+            .antMatchers("/account/change-password").authenticated()
+            .antMatchers(HttpMethod.GET, "/items").authenticated()
+            .antMatchers(HttpMethod.GET, "/items/**").authenticated()
+//            .antMatchers("/**").hasAuthority("ADMINISTRATOR")
         .and()
             .httpBasic()
         .and()

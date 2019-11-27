@@ -81,4 +81,28 @@
                 relativeToChangelogFile="true"
         />
     </changeSet>
+
+    <changeSet id="rename order table" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_008.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="foreign keys to null" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_009.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="coupon to user" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_010.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
 </databaseChangeLog>

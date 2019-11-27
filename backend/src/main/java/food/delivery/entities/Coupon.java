@@ -1,5 +1,6 @@
 package food.delivery.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,4 +33,9 @@ public class Coupon implements Serializable {
     @OneToOne
     @JoinColumn(name = "type_name", referencedColumnName = "name")
     private ItemType type;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("coupons")
+    private User user;
 }

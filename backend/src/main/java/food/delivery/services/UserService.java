@@ -117,7 +117,7 @@ public class UserService {
             authorityRepository.findById(Authorities.USER.name()).ifPresent(authorities::add);
         }
         newUser.setAuthorities(authorities);
-        User result =  userRepository.save(newUser);
+        User result = userRepository.save(newUser);
         if (!CollectionUtils.isEmpty(userDTO.getAddresses())) {
             Set<UserAddress> userAddresses = userAddressMapper.toEntity(userDTO.getAddresses());
             userAddresses = userAddresses.stream().peek(userAddress -> userAddress.setUser(result)).collect(Collectors.toSet());
@@ -127,7 +127,7 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser){
+    private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.getStatus().equals(UserStatus.ACTIVE)) {
             return false;
         }
@@ -160,16 +160,20 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user
-     * @param lastName last name of user
-     * @param email email id of user
+     * @param lastName  last name of user
+     * @param email     email id of user
      */
     public void updateUser(String firstName, String lastName, String email) {
         SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByLogin)
                 .ifPresent(user -> {
+
+
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
-                    user.setEmail(email.toLowerCase());
+                    if (email != null) {
+                        user.setEmail(email.toLowerCase());
+                    }
                     log.debug("Changed Information for User: {}", user);
                 });
     }
@@ -251,7 +255,7 @@ public class UserService {
     }
 
     private void setUserData(User user, UserDTO userDTO) {
-        if ( user != null && userDTO != null ) {
+        if (user != null && userDTO != null) {
             user.setLogin(userDTO.getLogin().toLowerCase());
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
