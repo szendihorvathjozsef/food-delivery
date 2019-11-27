@@ -353,15 +353,15 @@
             </activation>
             <properties>
                 <frontend.url>http://localhost:8080</frontend.url>
-                <datasource.url>jdbc:mysql://localhost:3306/easyfood</datasource.url>
-                <datasource.username>root</datasource.username>
-                <datasource.password></datasource.password>
+                <datasource.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></datasource.url>
+                <datasource.username>easyfood</datasource.username>
+                <datasource.password>easyfood</datasource.password>
                 <datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
 
                 <liquibase.changelog>classpath:config/liquibase/master.xml</liquibase.changelog>
-                <liquibase.url>jdbc:mysql://localhost:3306/easyfood</liquibase.url>
-                <liquibase.user>root</liquibase.user>
-                <liquibase.password></liquibase.password>
+                <liquibase.url><![CDATA[jdbc:mysql://localhost:3306/easyfood?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true]]></liquibase.url>
+                <liquibase.user>easyfood</liquibase.user>
+                <liquibase.password>easyfood</liquibase.password>
                 <liquibase.contexts>init</liquibase.contexts>
             </properties>
         </profile>
