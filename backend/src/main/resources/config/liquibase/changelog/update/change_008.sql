@@ -1,0 +1,1 @@
+ALTER TABLE `easyfood`.`order` RENAME `food_order`;

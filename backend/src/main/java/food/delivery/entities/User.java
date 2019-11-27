@@ -90,6 +90,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("user")
     private Set<Order> orders = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private Set<Coupon> coupons = new HashSet<>();
+
     public String getLogin() {
         return login;
     }

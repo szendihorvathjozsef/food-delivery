@@ -21,18 +21,26 @@ spring:
     password: @liquibase.password@
     contexts: @liquibase.contexts@
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: easy.food.service19@gmail.com
+    password: MK4vaJ73
+    protocol: smtp
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
+  messages:
+    basename: i18n/messages
+#  jpa:
+#    show-sql: true
 
 app:
   name: easyOrder
-  frontend-url: @frontend.url@
+  frontend-url: "http://localhost:8080"
   image-path: /images
   mail:
-    base-url: http://localhost:${server.port}
-    from: easy-order@localhost
+    from: "EasyFood <easy.food.service19@gmail.com>"
 
 jwt:
   token:
