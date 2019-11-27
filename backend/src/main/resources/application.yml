@@ -17,9 +17,18 @@ spring:
     user: @liquibase.user@
     password: @liquibase.password@
     contexts: @liquibase.contexts@
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
 
-frontend:
-  url: @frontend.url@
+app:
+  name: easyOrder
+  frontend-url: @frontend.url@
+  mail:
+    base-url: http://localhost:${server.port}
+    from: easy-order@localhost
 
 jwt:
   token:

@@ -3,12 +3,66 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     
-    <changeSet id="database initialization" author="Szendi-Horváth József" context="init">
+    <changeSet
+        id="database initialization"
+        runAlways="false"
+        author="Szendi-Horváth József"
+        context="init"
+    >
         <sqlFile
-            dbms="mysql"
-            path="changelog/init/authorities.sql"
-            relativeToChangelogFile="true"
+                dbms="mysql"
+                path="changelog/init/user.sql"
+                relativeToChangelogFile="true"
+        />
+        <sqlFile
+                dbms="mysql"
+                path="changelog/init/item.sql"
+                relativeToChangelogFile="true"
+        />
+        <sqlFile
+                dbms="mysql"
+                path="changelog/init/order.sql"
+                relativeToChangelogFile="true"
         />
     </changeSet>
-    
+
+    <changeSet id="auditing colums for user table" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_001.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="change password hash for default users" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_002.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="order status" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_003.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="coupon and menu" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_004.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
+
+    <changeSet id="initial datas" author="Szendi-Horváth József">
+        <sqlFile
+                dbms="mysql"
+                path="changelog/update/change_005.sql"
+                relativeToChangelogFile="true"
+        />
+    </changeSet>
 </databaseChangeLog>
