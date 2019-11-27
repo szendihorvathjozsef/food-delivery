@@ -32,6 +32,7 @@ A következő végpontok léteznek:
 ```json
 {
   "login": "",
+  "password": "",
   "firstName": "",
   "lastName": "",
   "email": "",
