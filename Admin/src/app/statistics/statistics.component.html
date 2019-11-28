@@ -1,37 +1,37 @@
 <mat-tab-group>
-    <mat-tab label="Napi adatok">
-        <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">         
-            <mat-form-field style="padding-bottom: 2%; margin-left:auto;margin-right:auto;display:block; width: 40%">
-                <input matInput [matDatepicker]="picker" placeholder="Nap kiválasztása">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-            <canvas baseChart
-                [data]="pieChartData"
-                [labels]="pieChartLabels"
-                [chartType]="pieChartType">
-            </canvas>
-        </div>
-    </mat-tab>
-    <mat-tab label="Időszakos bevételi adatok">               
-        <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">          
-            <mat-form-field style="margin-left:auto;margin-right:auto;display:block; width: 40%">
-                <input matInput [matDatepicker]="pickerStart" placeholder="Kezdő nap">
-                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-                <mat-datepicker #pickerStart></mat-datepicker>
-            </mat-form-field>   
-            <mat-form-field style="padding-bottom: 2%; margin-left:auto;margin-right:auto;display:block; width: 40%">
-                <input matInput [matDatepicker]="pickerEnd" placeholder="Záró nap">
-                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-                <mat-datepicker #pickerEnd
-                ></mat-datepicker>
-            </mat-form-field>
-            <canvas baseChart
-                [datasets]="lineChartData"
-                [labels]="lineChartLabels"
-                [legend]="lineChartLegend"
-                [chartType]="lineChartType">
-            </canvas>
-        </div>    
-    </mat-tab>
+    
+        <mat-tab label="Napi adatok">
+            <form>
+            <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
+                <mat-form-field
+                    style="padding-bottom: 2%; margin-left:auto;margin-right:auto;display:block; width: 40%">
+                    <input matInput [matDatepicker]="picker" placeholder="Nap kiválasztása" (ngModelChange)="getDailystat($event)" name="dayPicker" ngModel>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+                <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType">
+                </canvas>
+            </div>
+        </form>
+        </mat-tab>
+    
+
+    <!--<mat-tab label="Időszakos bevételi adatok">
+            <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
+                <mat-form-field style="margin-left:auto;margin-right:auto;display:block; width: 40%">
+                    <input matInput [matDatepicker]="pickerStart" placeholder="Kezdő nap" [formControl]="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field style="padding-bottom: 2%; margin-left:auto;margin-right:auto;display:block; width: 40%">
+                    <input matInput [matDatepicker]="pickerEnd" placeholder="Záró nap" [formControl]="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+                <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [legend]="lineChartLegend"
+                    [chartType]="lineChartType">
+                </canvas>
+            </div>
+        </mat-tab>-->
 </mat-tab-group>

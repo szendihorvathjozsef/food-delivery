@@ -12,12 +12,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {ReactiveFormsModule } from '@angular/forms'
+import {ReactiveFormsModule, FormsModule } from '@angular/forms'
 import {MatTabsModule} from '@angular/material/tabs';
 import {ChartsModule} from 'ng2-charts';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +30,9 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { TypeAddComponent } from './type-add/type-add.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CouponAddComponent } from './coupon-add/coupon-add.component';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -41,10 +46,12 @@ import { TypeAddComponent } from './type-add/type-add.component';
     StatisticsComponent,
     ItemAddComponent,
     ItemEditComponent,
-    TypeAddComponent
+    TypeAddComponent,
+    CouponAddComponent
   ],
   imports: [
     BrowserModule,
+    MatExpansionModule,
     AutocompleteLibModule,
     AppRoutingModule,
     ChartsModule,
@@ -64,15 +71,18 @@ import { TypeAddComponent } from './type-add/type-add.component';
     MatDatepickerModule,
     MatSelectModule,
     MatInputModule,
+    FormsModule,
+    HttpClientModule,
     RouterModule.forRoot([
       {path: 'statistics', component: StatisticsComponent},
       {path: 'pending-rentals', component: PendingRentalsComponent},
       {path: 'item-edit', component: ItemEditComponent},
       {path: 'item-add', component: ItemAddComponent},
       {path: 'type-add', component: TypeAddComponent},
+      {path: 'coupon-add', component: CouponAddComponent},
     ]),
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

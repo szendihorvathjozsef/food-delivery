@@ -1,0 +1,12 @@
+<form #couponAddForm="ngForm" (ngSubmit)=addNewCoupon(couponAddForm)>
+    <div class="example-container">
+        <mat-form-field>
+            <input matInput placeholder="Név" name="name" ngModel required>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Százalék" name="percent" ngModel required >
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit"
+            style="margin-left:auto;margin-right:auto;display:block; margin-top: 20pt; width: 220pt">Felvitel</button>
+    </div>
+</form>

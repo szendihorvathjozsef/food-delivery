@@ -1,53 +1,53 @@
-<div class="example-container">
+<form #itemEditForm="ngForm" (ngSubmit)=modifyItem(itemEditForm)>
+  <div class="example-container">
+
     <mat-form-field>
-      <input type="text" placeholder="Név" matInput [formControl]="myControl" [matAutocomplete]="auto" >
-      <mat-autocomplete  #auto="matAutocomplete">
-        <mat-option *ngFor="let item of filteredOptions | async " [value]="item.nev">
-          {{item.nev }}
+      <input type="text" placeholder="Név" matInput [formControl]="myControl" [matAutocomplete]="auto" name="name"
+        ngModel required>
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let item of filteredOptions | async " [value]="item.name">
+          {{item.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    
+
     <mat-form-field>
-      <textarea matInput placeholder="Ár" [value]="selected?.db"></textarea>
+      <input matInput placeholder="price" [value]="selected?.price" name="price" [ngModel]="selected?.price" required>
     </mat-form-field>
 
     <mat-form-field>
-        <textarea matInput placeholder="Kalória"></textarea>
-      </mat-form-field>
+      <input matInput placeholder="Kalória" name="kcal" [value]="selected?.kcal" [ngModel]="selected?.kcal" required>
+    </mat-form-field>
 
-      <mat-form-field>
-        <textarea matInput placeholder="Fehérje"></textarea>
-      </mat-form-field>
-
-      <mat-form-field>
-        <textarea matInput placeholder="Zsír"></textarea>
-      </mat-form-field>
-
-      <mat-form-field>
-        <textarea matInput placeholder="Szénhidrát"></textarea>
-      </mat-form-field>
-  
     <mat-form-field>
-      <mat-select placeholder="Típus">
-        <mat-option value="food">Étel</mat-option>
-        <mat-option value="drink">Ital</mat-option>
+      <input matInput placeholder="Fehérje" name="protein" [value]="selected?.protein" [ngModel]="selected?.protein" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Zsír" name="fat" [value]="selected?.fat" [ngModel]="selected?.fat" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Szénhidrát" name="carbs" [value]="selected?.carbs" [ngModel]="selected?.carbs" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Típus" name="foodType" [value]="selected?.foodType" [ngModel]="selected?.foodType" required>
+          <mat-option *ngFor="let type of types" [value]="type">{{type}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-card>
-        <mat-card-content>
-            <mat-checkbox >Glutén</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Tojás</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Földimogyoró</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Szója</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Tej</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Dió</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Zeller</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Mustár</mat-checkbox>
-            <mat-checkbox style="padding-left: 37pt">Szezámmag</mat-checkbox>
-        </mat-card-content>
-    </mat-card>
 
+
+    <mat-chip-list #chipList [multiple]="true" [selectable]="true"  style="margin-left:auto; margin-right:auto">
+        <mat-chip *ngFor="let category of listAllergen" #chip="matChip"
+          (click)="category.selected ? chip.deselect() : chip.selectViaInteraction()" [selected]="category.selected"
+          [selectable]="true" class="leadr-category-chip" (selectionChange)="changeAllergenStatus($event, category.name)">
+          {{category.name}}
+  
+        </mat-chip>
+      </mat-chip-list>
+
+    <button mat-raised-button color="primary" type="submit"
+      style="margin-left:auto;margin-right:auto;display:block; margin-top: 20pt; width: 220pt">Módosítás</button>
   </div>
-
-  <button mat-raised-button color="primary" style="margin-left:auto;margin-right:auto;display:block; margin-top: 20pt; width: 220pt">Módosítás</button>
+</form>

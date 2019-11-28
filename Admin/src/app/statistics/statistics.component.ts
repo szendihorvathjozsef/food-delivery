@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderService } from '../order-service/order.service';
+import { FormControl, NgForm } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -8,8 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatisticsComponent implements OnInit {
 
-  public pieChartLabels = ['Sales Q1', 'Sales Q2', 'Sales Q3', 'Sales Q4'];
-  public pieChartData = [120, 150, 180, 90];
+
+  public oneDayDate = new FormControl(new Date());
+  public startDate = new FormControl(new Date());
+  public endDate = new FormControl(new Date());
+
+
+  public pieChartLabels: string []  = ["valami", "fdg"];
+  public pieChartData: number [] = [2, 32];
   public pieChartType = 'pie';
 
   public barChartOptions = {
@@ -19,17 +28,38 @@ export class StatisticsComponent implements OnInit {
 
 
   
-  public lineChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public lineChartLabels: Date[] ;
   public lineChartType = 'line';
   public lineChartLegend = true;
-
-  public lineChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'}
-  ];
+  public lineChartData: number[];
  
-  constructor() { }
+  constructor(private orderService: OrderService, private datePipe: DatePipe) { }
 
   ngOnInit() {
+
   }
 
+  getDailystat(date:Date)
+  {
+    console.log(this.datePipe.transform(date, 'yyyy-MM-dd'));
+    this.orderService.getDailyStat(this.datePipe.transform(date, 'yyyy-MM-dd')).subscribe((res) => {
+      console.log(res);
+      this.pieChartLabels = [];
+      this.pieChartData = [];
+      res.forEach(element => {
+        this.pieChartLabels.push(element.name);
+        this.pieChartData.push(element.quantity);
+      });
+    });
+  }
+
+  getPeriodStat()
+  {
+    this.orderService.getPeriodStat(this.startDate.value, this.endDate.value).subscribe((res) => {
+      res.item.forEach(element => {
+        this.lineChartLabels.push(element.date);
+        this.lineChartData.push(element.income);
+      });
+    });
+  }
 }

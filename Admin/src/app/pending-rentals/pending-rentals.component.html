@@ -1,25 +1,26 @@
-<table style="width : 80%; padding-top: 20pt; padding-left: 8pt; text-align: center" >
-    <tr >
-        <td style="width : 33%"> <b>Megnevzés</b></td>
-        <td style="width : 33%"><b>Megrendelő</b></td>
-        <td style="width : 34%" ><b>Darabszám</b></td>
-    </tr>
-</table>
+<mat-tab-group>
+    <mat-tab *ngFor="let order of orders" [label]="First"> Content 1 </mat-tab>
+</mat-tab-group>
+<!--
+<form #pendingRentalsForm="ngForm" (ngSubmit)=modifyRentals(pendingRentalsForm)>
+    <mat-list role="list" *ngFor="let element of lista" style="padding-left: 2%">
+        <mat-list-item role="név">
+            <h2>{{element.name}}</h2>
+        </mat-list-item>
+        <mat-list role="list" *ngFor="let item of element.foods">
+            <mat-list-item role="név">
+                {{item}}
+            </mat-list-item>
+        </mat-list>
 
-<mat-selection-list #shoes>
-<mat-list-option *ngFor="let item of lista" >
-    <table style="width : 80%">
-        <tr>
-            <td style="width : 33%; text-align: center">{{item.nev}}</td>
-            <td style="width : 33%; text-align: center">{{item.megrendelo}}</td>
-            <td style="width : 34%; text-align: center" >{{item.db}}</td>
-        </tr>
-    </table>
-  
-  
-</mat-list-option>
-</mat-selection-list>
+        <mat-tab-group animationDuration="0ms">
+            <mat-tab label="Rendelés felvéve"> Rendelés felvéve </mat-tab>
+            <mat-tab label="Készül"> Készül </mat-tab>
+            <mat-tab label="Elkészült"> Elkészült </mat-tab>
+        </mat-tab-group>
+    </mat-list>
+</form>-->
 
 
 
-<button mat-raised-button color="primary" style="margin-left:auto;margin-right:auto; display:block; margin-top: 20pt; width: 220pt">Elészült</button>
+
