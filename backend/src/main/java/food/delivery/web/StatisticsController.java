@@ -4,6 +4,8 @@ import food.delivery.entities.Order;
 import food.delivery.repositories.DailyStatistics;
 import food.delivery.repositories.OrderRepository;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,13 +36,13 @@ public class StatisticsController extends BaseController {
     // kettő időpont között mennyi volt a bevétel
 
     @GetMapping("/day/{date}")
-    public void getUsedItemForDay(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<List<DailyStatistics>> getUsedItemForDay(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         List<DailyStatistics> statistics = orderRepository.findAllByStartIsAfterAndEndIsBefore(
                 startOfDay.toInstant(ZoneOffset.UTC),
                 endOfDay.toInstant(ZoneOffset.UTC));
-        statistics.forEach(System.out::println);
+        return new ResponseEntity<>(statistics, HttpStatus.OK);
     }
 
     @GetMapping("/between/{startDate}/{endDate}")

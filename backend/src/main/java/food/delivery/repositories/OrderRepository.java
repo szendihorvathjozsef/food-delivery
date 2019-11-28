@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query("SELECT SUM(ot.quantity) as quantity, it.name as name FROM Order o " +
+    @Query("SELECT new food.delivery.repositories.DailyStatistics(SUM(ot.quantity), it.name) FROM Order o " +
             "LEFT JOIN OrderItem ot ON ot.order = o.id " +
             "LEFT JOIN Item it ON it.id = ot.item " +
             "WHERE o.start >= :start AND o.end <= :end " +
