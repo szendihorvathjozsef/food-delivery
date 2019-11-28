@@ -3,6 +3,7 @@ package food.delivery.web;
 import food.delivery.entities.ItemType;
 import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.ItemTypeRepository;
+import food.delivery.services.dto.ItemTypeDTO;
 import food.delivery.services.mapper.ItemMapper;
 import food.delivery.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class ItemTypeController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody String newType) {
+    public ResponseEntity<ItemTypeDTO> create(@RequestBody String newType) {
         log.debug("REST request to create Item Type: {}", newType);
 
         if ( newType == null ) {
@@ -63,6 +64,6 @@ public class ItemTypeController extends BaseController {
                         ENTITY_NAME,
                         itemType.getName()
                 ))
-                .body(itemType.getName());
+                .body(new ItemTypeDTO(itemType.getName()));
     }
 }

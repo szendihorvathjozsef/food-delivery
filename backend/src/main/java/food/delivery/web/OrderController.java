@@ -8,6 +8,7 @@ import food.delivery.services.mapper.OrderMapper;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.ResponseUtil;
 import food.delivery.util.enums.OrderStatus;
+import food.delivery.websocket.NewOrderEventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +33,16 @@ public class OrderController extends BaseController {
 
     private static final String ENTITY_NAME = "order";
 
+    private final NewOrderEventPublisher newOrderEventPublisher;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
     public OrderController(
+            NewOrderEventPublisher newOrderEventPublisher,
             OrderRepository orderRepository,
             OrderMapper orderMapper
     ) {
+        this.newOrderEventPublisher = newOrderEventPublisher;
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
     }
@@ -71,11 +75,11 @@ public class OrderController extends BaseController {
         if (order.getId() != null) {
             throw new BadRequestAlertException("A new order cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
         Order orderEntity = orderMapper.toEntity(order);
         orderEntity.setStatus(OrderStatus.ORDERED);
         orderEntity = orderRepository.save(orderEntity);
         OrderDTO result = orderMapper.toDto(orderEntity, TimeZone.getDefault());
+        newOrderEventPublisher.publish(result);
         return ResponseEntity.created(new URI("/orders/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);
