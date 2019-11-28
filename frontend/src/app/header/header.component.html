@@ -4,7 +4,7 @@
     <div class="leftMenuBar">
         <button mat-button routerLink="/">Home</button>
         <button mat-button routerLink="/food">Foods</button>
-        <button mat-button routerLink="/profile">Profile</button>
+        <button mat-button *ngIf="isAuth" routerLink="/profile">Profile</button>
     </div>
 
     <span class="spacer"></span>
@@ -19,13 +19,17 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item routerLink="/login">
+                <button *ngIf="!isAuth" mat-menu-item routerLink="/login">
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Login</span>
                 </button>
-                <button mat-menu-item routerLink="/register">
+                <button *ngIf="!isAuth" mat-menu-item routerLink="/register">
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Register</span>
+                </button>
+                <button *ngIf="isAuth" mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Logout</span>
                 </button>
         </mat-menu>
     </div>

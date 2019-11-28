@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,6 +40,8 @@ import { CartComponent } from './cart/cart.component';
 import { FoodComponent } from './foods/food/food.component';
 import { OrderTableComponent } from './cart/order-table/order-table.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AuthInterceptor } from './auth/auth-interceptor';
+import { AuthGuard } from './auth/auth.guard';
 
 
 @NgModule({
@@ -88,10 +90,13 @@ import { ProfileComponent } from './profile/profile.component';
       { path: 'login' , component: LoginComponent},
       { path: 'register' , component: RegisterComponent},
       { path: 'cart' , component: CartComponent },
-      { path: 'profile' , component: ProfileComponent }
+      { path: 'profile' , component: ProfileComponent, canActivate:[AuthGuard] },
+      {path: '**', redirectTo: ''}
     ])
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
