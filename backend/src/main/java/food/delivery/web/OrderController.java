@@ -47,7 +47,6 @@ public class OrderController extends BaseController {
     public ResponseEntity<List<OrderDTO>> list() {
         log.debug("REST request to get all Order");
         List<Order> orders = orderRepository.findAll();
-        orders.forEach(order -> System.out.println(order.getOrders()));
         return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
     }
 
@@ -56,6 +55,13 @@ public class OrderController extends BaseController {
         log.debug("REST request to get Order: {}", id);
         Optional<OrderDTO> orderDTO = orderRepository.findById(id).map(order -> orderMapper.toDto(order, TimeZone.getDefault()));
         return ResponseUtil.wrapOrNotFound(orderDTO);
+    }
+
+    @GetMapping("/in-progress")
+    public ResponseEntity<List<OrderDTO>> listInProgress() {
+        log.debug("REST request to list work-in-progress Orders");
+        List<Order> orders = orderRepository.findAllByStatusIsNot(OrderStatus.FINISHED);
+        return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
     }
 
     @PostMapping
