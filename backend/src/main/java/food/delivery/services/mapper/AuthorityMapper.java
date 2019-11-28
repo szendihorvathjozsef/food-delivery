@@ -16,5 +16,4 @@ public interface AuthorityMapper extends EntityMapper<String, Authority> {
 
     String toDto(Authority authorities);
     Authority toEntity(String authorities);
-
 }

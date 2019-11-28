@@ -21,4 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.start >= :start AND o.end <= :end " +
             "GROUP BY it.name")
     List<DailyStatistics> findAllByStartIsAfterAndEndIsBefore(@Param("start") Instant start, @Param("end") Instant end);
+
+    List<Order> findAllByCreatedOnIsAfter(Instant timestamp);
 }
