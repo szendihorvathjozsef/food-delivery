@@ -1,58 +1,3 @@
-CREATE TABLE IF NOT EXISTS `easyfood`.`item_type`
-(
-    `name` VARCHAR(50) NOT NULL UNIQUE,
-    CONSTRAINT `item_type_PK` PRIMARY KEY (`name`)
-);
-
-CREATE TABLE IF NOT EXISTS `easyfood`.`item`
-(
-    `id`             BIGINT       NOT NULL AUTO_INCREMENT,
-    `name`           VARCHAR(100) NOT NULL UNIQUE,
-    `price`          FLOAT        NOT NULL,
-    `item_type_name` VARCHAR(50)  NOT NULL,
-    `kcal`           INT,
-    `protein`        INT,
-    `fat`            INT,
-    `carbs`          INT,
-    CONSTRAINT `items_Pk` PRIMARY KEY (`id`),
-    CONSTRAINT `items_FK_item_type_name` FOREIGN KEY (`item_type_name`) REFERENCES `easyfood`.`item_type`(`name`)
-);
-
-CREATE TABLE IF NOT EXISTS `easyfood`.`allergen`
-(
-    `name` VARCHAR(50) NOT NULL UNIQUE,
-    CONSTRAINT `allergen_PK` PRIMARY KEY (`name`)
-);
-
-CREATE TABLE IF NOT EXISTS `easyfood`.`items_allergen`
-(
-    `item_id`       BIGINT NOT NULL,
-    `allergen_name` VARCHAR(50) NOT NULL,
-    CONSTRAINT `items_allergies_PK` PRIMARY KEY (`item_id`, `allergen_name`),
-    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`),
-    CONSTRAINT `items_allergies_FK_allergen_name` FOREIGN KEY (`allergen_name`) REFERENCES `easyfood`.`allergen` (`name`)
-);
-
-CREATE TABLE IF NOT EXISTS `easyfood`.`order`
-(
-    `id`         BIGINT NOT NULL AUTO_INCREMENT,
-    `user_id`    BIGINT NOT NULL,
-    `total_cost` DOUBLE,
-    CONSTRAINT `orders_PK` PRIMARY KEY (`id`),
-    CONSTRAINT `orders_FK_user_id` FOREIGN KEY (`user_id`) REFERENCES `easyfood`.`user`(`id`)
-);
-
-CREATE TABLE IF NOT EXISTS `easyfood`.`order_item`
-(
-    `id`       BIGINT NOT NULL AUTO_INCREMENT,
-    `order_id` BIGINT NOT NULL,
-    `item_id`  BIGINT NOT NULL,
-    `quantity` INT    NOT NULL,
-    CONSTRAINT `order_item_PK` PRIMARY KEY (`id`),
-    CONSTRAINT `order_item_FK_order` FOREIGN KEY (`order_id`) REFERENCES `easyfood`.`order` (`id`),
-    CONSTRAINT `order_item_FK_item` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`)
-);
-
 CREATE TABLE IF NOT EXISTS `easyfood`.`user`
 (
     `id`             BIGINT       NOT NULL AUTO_INCREMENT,
@@ -108,6 +53,61 @@ CREATE TABLE IF NOT EXISTS `easyfood`.`user_authority`
 INSERT INTO `easyfood`.`user_authority` (user_id, authority_name)
 VALUES (1, 'ADMINISTRATOR'),
        (2, 'USER');
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`item_type`
+(
+    `name` VARCHAR(50) NOT NULL UNIQUE,
+    CONSTRAINT `item_type_PK` PRIMARY KEY (`name`)
+);
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`item`
+(
+    `id`             BIGINT       NOT NULL AUTO_INCREMENT,
+    `name`           VARCHAR(100) NOT NULL UNIQUE,
+    `price`          FLOAT        NOT NULL,
+    `item_type_name` VARCHAR(50)  NOT NULL,
+    `kcal`           INT,
+    `protein`        INT,
+    `fat`            INT,
+    `carbs`          INT,
+    CONSTRAINT `items_Pk` PRIMARY KEY (`id`),
+    CONSTRAINT `items_FK_item_type_name` FOREIGN KEY (`item_type_name`) REFERENCES `easyfood`.`item_type`(`name`)
+);
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`allergen`
+(
+    `name` VARCHAR(50) NOT NULL UNIQUE,
+    CONSTRAINT `allergen_PK` PRIMARY KEY (`name`)
+);
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`items_allergen`
+(
+    `item_id`       BIGINT NOT NULL,
+    `allergen_name` VARCHAR(50) NOT NULL,
+    CONSTRAINT `items_allergies_PK` PRIMARY KEY (`item_id`, `allergen_name`),
+    CONSTRAINT `items_allergies_FK_item_id` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`),
+    CONSTRAINT `items_allergies_FK_allergen_name` FOREIGN KEY (`allergen_name`) REFERENCES `easyfood`.`allergen` (`name`)
+);
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`order`
+(
+    `id`         BIGINT NOT NULL AUTO_INCREMENT,
+    `user_id`    BIGINT NOT NULL,
+    `total_cost` DOUBLE,
+    CONSTRAINT `orders_PK` PRIMARY KEY (`id`),
+    CONSTRAINT `orders_FK_user_id` FOREIGN KEY (`user_id`) REFERENCES `easyfood`.`user`(`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `easyfood`.`order_item`
+(
+    `id`       BIGINT NOT NULL AUTO_INCREMENT,
+    `order_id` BIGINT NOT NULL,
+    `item_id`  BIGINT NOT NULL,
+    `quantity` INT    NOT NULL,
+    CONSTRAINT `order_item_PK` PRIMARY KEY (`id`),
+    CONSTRAINT `order_item_FK_order` FOREIGN KEY (`order_id`) REFERENCES `easyfood`.`order` (`id`),
+    CONSTRAINT `order_item_FK_item` FOREIGN KEY (`item_id`) REFERENCES `easyfood`.`item` (`id`)
+);
 
 ALTER TABLE easyfood.`user` ADD created_by varchar(50) NOT NULL;
 ALTER TABLE easyfood.`user` ADD created_date TIMESTAMP NULL;
