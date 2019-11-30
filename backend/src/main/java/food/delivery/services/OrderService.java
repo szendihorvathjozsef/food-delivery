@@ -58,7 +58,7 @@ public class OrderService {
         Order order = orderMapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.ORDERED);
 
-        if ( orderDTO.getUser().getId() == null ) {
+        if ( orderDTO.getUser() != null && orderDTO.getUser().getId() == null ) {
             User user = userService.createAnonymousUser(orderDTO.getUser());
             order.setUser(user);
         }
