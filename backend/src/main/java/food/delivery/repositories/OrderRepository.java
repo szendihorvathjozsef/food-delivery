@@ -26,4 +26,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByCreatedOnIsAfter(Instant timestamp);
 
     List<Order> findAllByStatusIsNot(OrderStatus orderStatus);
+
+    List<Order> findAllByUser_Login(String login);
+
+    List<Order> findAllByUser_LoginAndStatusIsNot(String login, OrderStatus orderStatus);
 }

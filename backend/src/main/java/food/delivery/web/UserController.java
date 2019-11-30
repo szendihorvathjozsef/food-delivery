@@ -65,9 +65,8 @@ public class UserController extends BaseController {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);
-            // TODO kivezetni app props-ba a app nevét
             return ResponseEntity.created(new URI("/users/" + newUser.getLogin()))
-                    .headers(HeaderUtil.createAlert("easyOrder", "userManagement.created", newUser.getLogin()))
+                    .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))
                     .body(newUser);
         }
     }
@@ -88,10 +87,9 @@ public class UserController extends BaseController {
 
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
-        // TODO kivezetni app props-ba a app nevét
         return ResponseUtil.wrapOrNotFound(
             updatedUser,
-            HeaderUtil.createAlert("easyOrder", "userManagement.updated", userDTO.getLogin())
+            HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin())
         );
     }
 

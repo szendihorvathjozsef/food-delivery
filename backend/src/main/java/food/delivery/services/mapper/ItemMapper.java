@@ -1,7 +1,6 @@
 package food.delivery.services.mapper;
 
 import food.delivery.entities.Item;
-import food.delivery.entities.ItemType;
 import food.delivery.services.dto.ItemDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

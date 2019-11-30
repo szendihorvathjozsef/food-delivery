@@ -1,14 +1,19 @@
 package food.delivery.web;
 
 import food.delivery.entities.Order;
+import food.delivery.exceptions.AccountResourceException;
 import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.OrderRepository;
+import food.delivery.security.SecurityUtils;
+import food.delivery.services.OrderService;
+import food.delivery.services.dto.CouponDTO;
 import food.delivery.services.dto.OrderDTO;
 import food.delivery.services.mapper.OrderMapper;
 import food.delivery.util.HeaderUtil;
 import food.delivery.util.ResponseUtil;
 import food.delivery.util.enums.OrderStatus;
-import food.delivery.websocket.NewOrderEventPublisher;
+import food.delivery.web.model.ChangeOrdersStatus;
+import food.delivery.web.model.OrderModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,24 +38,40 @@ public class OrderController extends BaseController {
 
     private static final String ENTITY_NAME = "order";
 
-    private final NewOrderEventPublisher newOrderEventPublisher;
-    private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     public OrderController(
-            NewOrderEventPublisher newOrderEventPublisher,
-            OrderRepository orderRepository,
-            OrderMapper orderMapper
+            OrderMapper orderMapper,
+            OrderService orderService,
+            OrderRepository orderRepository
     ) {
-        this.newOrderEventPublisher = newOrderEventPublisher;
-        this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.orderService = orderService;
+        this.orderRepository = orderRepository;
     }
 
     @GetMapping
     public ResponseEntity<List<OrderDTO>> list() {
         log.debug("REST request to get all Order");
         List<Order> orders = orderRepository.findAll();
+        return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<OrderDTO>> listUsers() {
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        log.debug("REST request to get all Order for User: {}", userLogin);
+        List<Order> orders = orderRepository.findAllByUser_Login(userLogin);
+        return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/in-progress")
+    public ResponseEntity<List<OrderDTO>> listUsersInProgress() {
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        log.debug("REST request to get all in progress Order for User: {}", userLogin);
+        List<Order> orders = orderRepository.findAllByUser_LoginAndStatusIsNot(userLogin, OrderStatus.FINISHED);
         return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
     }
 
@@ -68,18 +89,30 @@ public class OrderController extends BaseController {
         return new ResponseEntity<>(orderMapper.toDto(orders, TimeZone.getDefault()), HttpStatus.OK);
     }
 
+    @PostMapping("/finished")
+    public ResponseEntity<Boolean> finishOrders(@Valid @RequestBody ChangeOrdersStatus orderIds) {
+        if ( orderIds == null || CollectionUtils.isEmpty(orderIds.getIds())) {
+            throw new BadRequestAlertException("Invalid ids", ENTITY_NAME, "idnull");
+        }
+        List<Order> orders = orderRepository.findAllById(orderIds.getIds());
+        orders = orders.stream().peek(order -> order.setStatus(OrderStatus.FINISHED)).collect(Collectors.toList());
+        orderRepository.saveAll(orders);
+        return ResponseEntity.ok().body(true);
+    }
+
     @PostMapping
-    public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderDTO order) throws URISyntaxException {
-        log.debug("REST request to save Order: {}", order);
+    public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderModel orderModel) throws URISyntaxException {
+        log.debug("REST request to save Order: {}", orderModel.getOrder());
+
+        OrderDTO order = orderModel.getOrder();
+        List<CouponDTO> coupons = orderModel.getCoupons();
 
         if (order.getId() != null) {
             throw new BadRequestAlertException("A new order cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Order orderEntity = orderMapper.toEntity(order);
-        orderEntity.setStatus(OrderStatus.ORDERED);
-        orderEntity = orderRepository.save(orderEntity);
-        OrderDTO result = orderMapper.toDto(orderEntity, TimeZone.getDefault());
-        newOrderEventPublisher.publish(result);
+
+        OrderDTO result = orderService.createNewOrder(order, coupons);
+
         return ResponseEntity.created(new URI("/orders/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);
@@ -102,17 +135,6 @@ public class OrderController extends BaseController {
                         order.getId().toString()
                 ))
                 .body(result);
-    }
-
-    @PostMapping("/finished")
-    public ResponseEntity<Boolean> finishOrders(@RequestBody List<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            throw new BadRequestAlertException("Invalid ids", ENTITY_NAME, "idnull");
-        }
-        List<Order> orders = orderRepository.findAllById(ids);
-        orders = orders.stream().peek(order -> order.setStatus(OrderStatus.FINISHED)).collect(Collectors.toList());
-        orderRepository.saveAll(orders);
-        return ResponseEntity.ok().body(true);
     }
 
     @DeleteMapping("/{id}")

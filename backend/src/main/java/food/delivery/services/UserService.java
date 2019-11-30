@@ -11,18 +11,22 @@ import food.delivery.repositories.AuthorityRepository;
 import food.delivery.repositories.UserAddressRepository;
 import food.delivery.repositories.UserRepository;
 import food.delivery.security.SecurityUtils;
+import food.delivery.services.dto.UserAddressDTO;
 import food.delivery.services.dto.UserDTO;
 import food.delivery.services.mapper.UserAddressMapper;
 import food.delivery.util.RandomUtil;
 import food.delivery.util.enums.Authorities;
 import food.delivery.util.enums.UserStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -156,6 +160,30 @@ public class UserService {
         return user;
     }
 
+    public User createAnonymousUser(UserDTO userDTO) {
+        User user = new User();
+        user.setLogin(RandomStringUtils.random(15, true, true));
+        user.setPassword(passwordEncoder.encode(RandomUtil.generatePassword()));
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail().toLowerCase());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setStatus(UserStatus.ANONYMOUS);
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(new Authority("ANONYMOUS"));
+        user.setAuthorities(authorities);
+        final User finalUser = userRepository.save(user);
+
+        if (!CollectionUtils.isEmpty(userDTO.getAddresses())) {
+            Set<UserAddress> userAddresses = userAddressMapper.toEntity(userDTO.getAddresses());
+            userAddresses = userAddresses.stream().peek(userAddress -> userAddress.setUser(finalUser)).collect(Collectors.toSet());
+            userAddressRepository.saveAll(userAddresses);
+        }
+
+        log.debug("Created Information for User: {}", user);
+        return user;
+    }
+
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
@@ -163,17 +191,22 @@ public class UserService {
      * @param lastName  last name of user
      * @param email     email id of user
      */
-    public void updateUser(String firstName, String lastName, String email) {
+    public void updateUser(String firstName, String lastName, String email, String phoneNumber, Set<UserAddressDTO> addresses) {
         SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByLogin)
                 .ifPresent(user -> {
-
-
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
-                    if (email != null) {
+                    user.setPhoneNumber(phoneNumber);
+
+                    if (!CollectionUtils.isEmpty(addresses)) {
+                        Set<UserAddress> userAddresses = userAddressMapper.toEntity(addresses);
+                        userAddresses.forEach(adr -> user.getAddresses().add(adr));
+                    }
+                    if (email != null && !email.equals(user.getEmail())) {
                         user.setEmail(email.toLowerCase());
                     }
+
                     log.debug("Changed Information for User: {}", user);
                 });
     }
@@ -260,6 +293,7 @@ public class UserService {
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setEmail(userDTO.getEmail().toLowerCase());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
         }
     }
 }

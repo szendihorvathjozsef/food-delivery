@@ -7,4 +7,5 @@ public enum UserStatus {
     ACTIVE,
     NEED_ACTIVATION,
     BANNED,
+    ANONYMOUS
 }

@@ -1,11 +1,9 @@
 package food.delivery.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import food.delivery.util.enums.CouponStatus;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -22,20 +20,15 @@ public class Coupon implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 4, max = 50)
-    @Column(nullable = false, length = 50)
-    private String name;
-
     @Column
-    private Integer percent;
+    @Enumerated(EnumType.STRING)
+    private CouponStatus status = CouponStatus.UNUSED;
 
     @OneToOne
-    @JoinColumn(name = "type_name", referencedColumnName = "name")
-    private ItemType type;
+    @JoinColumn(name = "coupon_type_id", referencedColumnName = "id")
+    private CouponType type;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("coupons")
     private User user;
 }

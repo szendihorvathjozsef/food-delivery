@@ -2,8 +2,8 @@ package food.delivery.web;
 
 import food.delivery.security.jwt.JwtFilter;
 import food.delivery.security.jwt.TokenProvider;
-import food.delivery.web.model.LoginModel;
 import food.delivery.web.model.JwtToken;
+import food.delivery.web.model.LoginModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

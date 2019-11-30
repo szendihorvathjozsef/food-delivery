@@ -1,6 +1,8 @@
 package food.delivery.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "authority")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Authority implements Serializable {
 
     private static final Long serialVersionUID = 1L;
