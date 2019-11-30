@@ -200,8 +200,11 @@ public class UserService {
                     user.setPhoneNumber(phoneNumber);
 
                     if (!CollectionUtils.isEmpty(addresses)) {
-                        Set<UserAddress> userAddresses = userAddressMapper.toEntity(addresses);
-                        userAddresses.forEach(adr -> user.getAddresses().add(adr));
+                        Set<UserAddress> userAddresses = userAddressMapper.toEntity(addresses)
+                                .stream()
+                                .peek(adr -> adr.setUser(user))
+                                .collect(Collectors.toSet());
+                        user.getAddresses().addAll(userAddresses);
                     }
                     if (email != null && !email.equals(user.getEmail())) {
                         user.setEmail(email.toLowerCase());

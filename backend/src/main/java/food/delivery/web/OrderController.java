@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -102,7 +103,10 @@ public class OrderController extends BaseController {
             throw new BadRequestAlertException("Invalid ids", ENTITY_NAME, "idnull");
         }
         List<Order> orders = orderRepository.findAllById(orderIds.getIds());
-        orders = orders.stream().peek(order -> order.setStatus(OrderStatus.FINISHED)).collect(Collectors.toList());
+        orders = orders.stream().peek(order -> {
+            order.setStatus(OrderStatus.FINISHED);
+            order.setEnd(Instant.now());
+        }).collect(Collectors.toList());
         orderRepository.saveAll(orders);
         return ResponseEntity.ok().body(true);
     }

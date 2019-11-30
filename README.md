@@ -11,6 +11,7 @@ Food delivery application
     * USER
     * ADMINISTATOR
 * UserAddress : cím
+    * id: number
     * address: maga cím, várossal
     * postCode: irányítószám
     * type: AddressType
