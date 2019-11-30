@@ -1,5 +1,6 @@
 package food.delivery.services;
 
+import food.delivery.entities.Order;
 import food.delivery.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,5 +90,10 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendOrderMail(User user, Order order) {
+        log.debug("Sending order email to '{}'", user.getEmail());
     }
 }
