@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import food.delivery.config.Constants;
 import food.delivery.util.enums.UserStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "user")
+@EqualsAndHashCode(callSuper = true)
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +58,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 254, unique = true)
     private String email;
 
+    @Size(max = 15)
+    @Column(name = "phone_number", length = 15)
+    private String phoneNumber;
+
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -82,17 +88,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     private Set<UserAddress> addresses = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private Set<Order> orders = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private Set<Coupon> coupons = new HashSet<>();
 
     public String getLogin() {
         return login;

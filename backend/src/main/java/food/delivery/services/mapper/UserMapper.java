@@ -4,7 +4,6 @@ import food.delivery.entities.Authority;
 import food.delivery.entities.User;
 import food.delivery.services.dto.UserDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.Set;
 
@@ -18,9 +17,26 @@ public interface UserMapper extends EntityMapper<UserDTO, User> {
 
     User toEntity(UserDTO userDTO);
 
-    String toDto(Authority authority);
+    Set<Authority> toEntity(Set<String> authorities);
+    Set<String> toDto(Set<Authority> authorities);
 
-    Authority toEntity(String name);
+    default String toDto(Authority authority) {
+        if ( authority == null || authority.getName() == null ) {
+            return null;
+        }
+        return authority.getName();
+    }
+
+    default Authority toEntity(String authorityName) {
+        if ( authorityName == null ) {
+            return null;
+        }
+
+        Authority authority = new Authority();
+        authority.setName(authorityName);
+        return authority;
+    }
+
 
     default User fromId(Long id) {
         if ( id == null ) {

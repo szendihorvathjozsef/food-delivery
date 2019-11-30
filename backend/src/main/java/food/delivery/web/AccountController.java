@@ -9,6 +9,7 @@ import food.delivery.security.SecurityUtils;
 import food.delivery.services.MailService;
 import food.delivery.services.UserService;
 import food.delivery.services.dto.UserDTO;
+import food.delivery.services.mapper.UserMapper;
 import food.delivery.web.model.KeyAndPasswordModel;
 import food.delivery.web.model.PasswordChangeModel;
 import food.delivery.web.model.RegisterModel;
@@ -35,11 +36,13 @@ public class AccountController {
         }
     }
 
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final UserService userService;
     private final MailService mailService;
 
-    public AccountController(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountController(UserMapper userMapper, UserRepository userRepository, UserService userService, MailService mailService) {
+        this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -74,7 +77,7 @@ public class AccountController {
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-                .map(UserDTO::new)
+                .map(userMapper::toDto)
                 .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
@@ -89,7 +92,7 @@ public class AccountController {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getAddresses());
     }
 
     @PostMapping(path = "/account/change-password")

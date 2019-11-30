@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * @author szendihorvathjozsef
  */
-@Mapper(componentModel = "spring", uses = {ItemMapper.class, AuthorityMapper.class})
+@Mapper(componentModel = "spring", uses = {ItemMapper.class, UserMapper.class})
 public interface OrderItemMapper extends EntityMapper<OrderItemDTO, food.delivery.entities.OrderItem> {
 
     OrderItem toEntity(OrderItemDTO orderItemDTO);

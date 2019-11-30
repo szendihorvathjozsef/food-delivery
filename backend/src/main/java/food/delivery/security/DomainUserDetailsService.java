@@ -1,9 +1,9 @@
 package food.delivery.security;
 
 import food.delivery.entities.User;
-import food.delivery.util.enums.UserStatus;
 import food.delivery.exceptions.UserNotActivatedException;
 import food.delivery.repositories.UserRepository;
+import food.delivery.util.enums.UserStatus;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

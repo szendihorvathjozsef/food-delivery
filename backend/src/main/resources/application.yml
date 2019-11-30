@@ -37,7 +37,7 @@ spring:
 
 app:
   name: easyOrder
-  frontend-url: "http://localhost:8080"
+  frontend-url: "http://localhost:4200"
   image-path: /images
   mail:
     from: "EasyFood <easy.food.service19@gmail.com>"

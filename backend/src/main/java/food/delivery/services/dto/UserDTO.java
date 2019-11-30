@@ -41,6 +41,9 @@ public class UserDTO implements Serializable {
 
     private UserStatus status;
 
+    @Size(max = 15)
+    private String phoneNumber;
+
     private String createdBy;
 
     private Instant createdDate;

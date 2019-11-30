@@ -3,6 +3,7 @@ package food.delivery.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import food.delivery.util.enums.AddressType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "user_address")
+@EqualsAndHashCode(exclude = {"user"})
 public class UserAddress implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class UserAddress implements Serializable {
     @Enumerated(EnumType.STRING)
     private AddressType type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("addresses")
     private User user;
