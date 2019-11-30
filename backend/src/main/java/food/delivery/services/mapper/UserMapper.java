@@ -1,6 +1,7 @@
 package food.delivery.services.mapper;
 
 import food.delivery.entities.Authority;
+import food.delivery.entities.ItemAllergen;
 import food.delivery.entities.User;
 import food.delivery.services.dto.UserDTO;
 import org.mapstruct.Mapper;

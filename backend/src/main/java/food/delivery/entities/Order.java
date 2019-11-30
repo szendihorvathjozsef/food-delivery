@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import food.delivery.services.converter.InstantConverter;
 import food.delivery.util.enums.OrderStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -21,6 +22,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "food_order")
+@EqualsAndHashCode(exclude = {"orders"})
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,20 +50,19 @@ public class Order implements Serializable {
     @JsonIgnore
     @CreatedDate
     @Column(name = "created_on", updatable = false)
-    private Instant createdOn;
+    private Instant createdOn = Instant.now();
 
     @JsonIgnore
     @LastModifiedDate
     @Column(name = "updated_on")
-    private Instant updatedOn;
+    private Instant updatedOn = Instant.now();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
     @JsonIgnoreProperties("order")
     private Set<OrderItem> orders = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("order")
     private User user;
 
 }

@@ -5,6 +5,7 @@ import food.delivery.exceptions.AccountResourceException;
 import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.OrderRepository;
 import food.delivery.security.SecurityUtils;
+import food.delivery.services.MailService;
 import food.delivery.services.OrderService;
 import food.delivery.services.dto.CouponDTO;
 import food.delivery.services.dto.OrderDTO;
@@ -14,6 +15,7 @@ import food.delivery.util.ResponseUtil;
 import food.delivery.util.enums.OrderStatus;
 import food.delivery.web.model.ChangeOrdersStatus;
 import food.delivery.web.model.OrderModel;
+import food.delivery.websocket.NewOrderEventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,17 +41,22 @@ public class OrderController extends BaseController {
     private static final String ENTITY_NAME = "order";
 
     private final OrderMapper orderMapper;
+    private final MailService mailService;
     private final OrderService orderService;
     private final OrderRepository orderRepository;
+    private final NewOrderEventPublisher newOrderEventPublisher;
 
     public OrderController(
             OrderMapper orderMapper,
+            MailService mailService,
             OrderService orderService,
-            OrderRepository orderRepository
-    ) {
+            OrderRepository orderRepository,
+            NewOrderEventPublisher newOrderEventPublisher) {
         this.orderMapper = orderMapper;
+        this.mailService = mailService;
         this.orderService = orderService;
         this.orderRepository = orderRepository;
+        this.newOrderEventPublisher = newOrderEventPublisher;
     }
 
     @GetMapping
@@ -112,7 +119,8 @@ public class OrderController extends BaseController {
         }
 
         OrderDTO result = orderService.createNewOrder(order, coupons);
-
+        newOrderEventPublisher.publish(result);
+        mailService.sendOrderMail(result.getUser(), result);
         return ResponseEntity.created(new URI("/orders/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);

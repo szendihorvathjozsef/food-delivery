@@ -305,7 +305,7 @@ kuponoknál a használt kuponokat kell beküldeni
 }
 ```
 * POST /orders/finish : rendelések befejezése  
-Item id megadása egy tömben
+Order id megadása egy tömben
 ```json
 [1, 2, 3]
 ```

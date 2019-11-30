@@ -1,7 +1,8 @@
 package food.delivery.services;
 
-import food.delivery.entities.Order;
 import food.delivery.entities.User;
+import food.delivery.services.dto.OrderDTO;
+import food.delivery.services.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -93,7 +94,14 @@ public class MailService {
     }
 
     @Async
-    public void sendOrderMail(User user, Order order) {
+    public void sendOrderMail(UserDTO user, OrderDTO order) {
         log.debug("Sending order email to '{}'", user.getEmail());
+        Context context = new Context(Locale.forLanguageTag("hu"));
+        context.setVariable(USER, user);
+        context.setVariable("order", order);
+        context.setVariable(BASE_URL, mailBaseUrl);
+        String content = templateEngine.process("mail/orderEmail", context);
+        String subject = messageSource.getMessage("email.order.title", null, Locale.forLanguageTag("hu"));
+        sendEmail(user.getEmail(), subject, content, false, true);
     }
 }
