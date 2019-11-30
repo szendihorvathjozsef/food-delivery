@@ -23,7 +23,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatRadioModule} from '@angular/material/radio';
 
 
 
@@ -84,6 +84,7 @@ import { AuthGuard } from './auth/auth.guard';
     MatListModule,
     MatCheckboxModule,
     MatExpansionModule,
+    MatRadioModule,
     RouterModule.forRoot([
       { path: '' , component: HomeComponent},
       { path: 'food' , component: FoodsComponent},

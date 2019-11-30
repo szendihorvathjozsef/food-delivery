@@ -28,17 +28,17 @@ export class ProfileService {
     }>(this.url + `/users/${username}`);
   }
 
-  updateUserInformation(data:{username: string, firstName: string, lastName: string, email: string, status: string, authorities: string[]}) {
-    const user = {
-      login: data.username,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      status: data.status,
-      authorities: data.authorities
+  updateUserInformation(username:string, firstName:string, lastName:string, email:string,phoneNumber:string,addresses:AdressModel[]) {
+    const account = {
+      login: username,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      addresses: addresses
     }
-
-    return this.http.put(this.url + "/users", user);
+    
+    return this.http.post(this.url + "/account", account);
   }
 
   getCoupons() {

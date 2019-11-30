@@ -4,7 +4,6 @@ import { CouponModel } from './coupon.model';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../auth/auth.service';
 import { AdressModel } from '../auth/adress.model';
-import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -12,9 +11,6 @@ import { concat } from 'rxjs';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-
-  
-
   username: string;
   userAdress: AdressModel[];
   status:string;
@@ -27,23 +23,19 @@ export class ProfileComponent implements OnInit {
   constructor(private profileService:ProfileService,private authService: AuthService) { }
 
   ngOnInit() {
-    this.username = this.authService.getUserName();
-    this.profileService.getUserInformation(this.username).subscribe(res => {
-      this.username = res.login;
-      this.userAdress = res.addresses;
-      this.status = res.status;
+    this.username = this.authService.getUser().username;
+    const user = this.authService.getUser();
+    this.username = user.username;
+    this.adressData = [
+      {icon: "drafts", name: "postCode", title: "Post Code:", value: user.addresses[0].postCode.toString() },
+      {icon: "location_city", name: "address", title: "Adress:", value: user.addresses[0].address }
+    ]
 
-      this.adressData = [
-        {icon: "drafts", name: "postCode", title: "Post Code:", value: "8200"},//this.userAdress[0].postCode.toString() },
-        {icon: "location_city", name: "adress", title: "Adress:", value: "Veszprém Vár utca 20."}//this.userAdress[0].address }
-      ]
-
-      this.contactsData = [
-        {icon: "email", name: "email", title: "Email Adress:", value: res.email },
-        {icon: "phone", name: "phone", title: "State:", value: "+36205669872" },
-        {icon: "person", name: "name", title: "Full Name:", value: res.firstName.concat(" ", res.lastName) }
-      ];
-    });
+    this.contactsData = [
+      {icon: "email", name: "email", title: "Email Adress:", value: user.email },
+      {icon: "phone", name: "phone", title: "State:", value: user.phonenumber },
+      {icon: "person", name: "name", title: "Full Name:", value: user.firstname.concat(" ", user.lastname) }
+    ];
 
     this.profileService.getCoupons().subscribe(res => {
       res.forEach(coupon => {
@@ -61,27 +53,24 @@ export class ProfileComponent implements OnInit {
     this.editMode = editMode;
   }
 
-  editData(dataName:string,object:any,type:string){
-    if(type === "address"){
-      this.adressData.find(data => data.name == data.name).value = object.value;
-    } else if(type === "contact") {
-      this.contactsData.find(data => data.name == data.name).value = object.value;
-    }
-    
-    const name:string[] = this.contactsData.find(data => data.name == "name").value.split(" ");
-    const username:string = this.authService.getUserName().toString();
-    const user = {
-      username: username,
-      firstName: name[0],
-      lastName: name[1],
-      email: this.contactsData.find(data => data.name == "email").value,
-      status: this.status,
-      authorities: ['USER']
-
+  editData(form:NgForm){
+    const firstname:string = form.value.name.split(" ")[0];
+    const lastname:string = form.value.name.split(" ")[1];
+    const email:string = form.value.email;
+    const phonenumber:string = form.value.phone;
+    const address:AdressModel = {
+      postCode: +form.value.postCode,
+      address: form.value.address,
+      type:"TRANSPORT"
     };
 
-    this.profileService.updateUserInformation(user).subscribe(res=>{
-      console.log(res);
+    this.contactsData[0].value = email;
+    this.contactsData[1].value = phonenumber;
+    this.contactsData[2].value = form.value.name;
+    this.authService.modifyUser(firstname,lastname,email,phonenumber,address);
+
+    this.profileService.updateUserInformation(this.username,firstname,lastname,email,phonenumber,this.authService.getUser().addresses).subscribe(res=>{
+      this.authService.openSnackBar("Your Details Changed!","");
     });
     this.editMode = 'none';
   }

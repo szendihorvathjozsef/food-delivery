@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
-import { OrderItem } from './order-table/order-item.model';
-import { Food } from '../foods/food-model';
+import { OrderItem } from './cart/order-table/order-item.model';
+import { Food } from './foods/food-model';
 import { Subject } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { DatePipe } from '@angular/common';
@@ -17,7 +17,7 @@ export class OrderService {
     private itemEmptyListener = new Subject<{ isEmpty: boolean, totalCost: number }>();
     private url: string = "http://localhost:8081";
 
-    constructor(private http: HttpClient,private authService:AuthService,private datePipe: DatePipe) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
     addOrderItem(food: Food) {
         this.itemCount++;
@@ -82,24 +82,35 @@ export class OrderService {
         this.itemCountListener.next(this.itemCount);
     }
 
-    takeAnOrder(totalCost:number,startTime:Date, orders:{quantity:number,item:{ id:number }}[]) {
-        var id = null;
-        if(this.authService.getAuth()){
-            this.http.get<{id:number}>(this.url + `/users/${this.authService.getUserName()}`).subscribe(res => {
-                id = res.id;
+    takeAnOrder() {
+        var order;
+        if (this.authService.getUser().id) {
+            const orders: {quantity:number,item:{id:number}}[] = [];
+            this.orderItems.forEach(item => {
+                orders.push({
+                    quantity: item.quantity,
+                    item: {
+                        id: item.id
+                    }
+                });
+            });
+            order = {
+                coupons: [],
+                orders: {
+                    totalCost: this.totalCost,
+                    startTime: "2019-11-27 12:58",
+                    endTime: "2019-11-27 13:58",
+                    orders: orders,
+                    user: {
+                        id: this.authService.getUser().id
+                    }
+                }
+            };
+            console.log(order);
+            this.http.post(this.url + "/orders", order).subscribe( res => {
+                console.log(res);
             });
         }
-        //const now = this.datePipe.transform(Date.now(),)  
-        const order = {
-            totalCost: this.totalCost,
-            startTime: startTime,
-            endTime: null,
-            orders: orders,
-            user: {
-                id: id
-            }
-        }
-        this.http.post(this.url + "/orders", order);
     }
 
     // Getters
