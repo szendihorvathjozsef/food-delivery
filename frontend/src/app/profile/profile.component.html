@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      {{ username }}
+      {{ username | titlecase }}
     </mat-card-title>
     <mat-card-subtitle>
       User
@@ -21,11 +21,11 @@
           </strong> {{ item.value }}
         </div>
         <!-- Editable -->
-        <div (keyup.enter)="doubleClick('none')" *ngIf="editMode == item.name"><strong>
+        <div (keyup.enter)="editData(item.name,input,'address')" *ngIf="editMode == item.name"><strong>
             <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
           </strong>
           <mat-form-field class="example-full-width">
-            <input matInput maxlength="4" [value]="item.value">
+            <input #input matInput maxlength="4" [ngModel]="item.value">
           </mat-form-field>
         </div>
       </div>
@@ -46,11 +46,11 @@
           </strong> {{ item.value }}
         </div>
         <!-- Editable -->
-        <div (keyup.enter)="doubleClick('none')" *ngIf="editMode == item.name"><strong>
+        <div (keyup.enter)="editData(item.name,input2,'contact')" *ngIf="editMode == item.name"><strong>
             <mat-icon>{{ item.icon }}</mat-icon>{{ item.title }}
           </strong>
           <mat-form-field class="example-full-width">
-            <input matInput maxlength="4" [value]="item.value">
+            <input #input2 matInput [ngModel]="item.value">
           </mat-form-field>
         </div>
       </div>
@@ -87,15 +87,15 @@
       </h5>
       <form (ngSubmit)="changePassword(form)" #form="ngForm">
         <mat-form-field class="example-full-width">
-          <input matInput maxlength="4" placeholder="Old Password" name="oldPassword" ngModel="oldPassword" required>
+          <input matInput minlength="8" type="password" placeholder="Old Password" name="oldPassword" ngModel required>
         </mat-form-field>
         <br><br>
         <mat-form-field class="example-full-width">
-          <input matInput maxlength="4" placeholder=" New Password" name="newPassword" ngModel="newPassword" required>
+          <input matInput minlength="8" type="password" placeholder=" New Password" name="newPassword" ngModel required>
         </mat-form-field>
         <br><br>
         <mat-form-field class="example-full-width">
-          <input matInput maxlength="4" placeholder="Verify New Password" name="newPasswordverify" ngModel required>
+          <input matInput minlength="8" type="password" placeholder="Verify New Password" name="newPasswordverify" ngModel required>
         </mat-form-field>
         <br><br>
         <button mat-button type="submit" color="primary">Change</button>

@@ -1,0 +1,11 @@
+1. Az ordersnél user id-t kell megadni igy ha anonym akarunk rendelni akkor nem tudunk mert kinek hova szállitjuk?
+2. Kupon menü hiányzik, hogy hogyan aktiválja a felhasználó, valami amivel aktivvá teheti a kupont, 
+és utána ha felhasználja akkor USED státuszba rakhatja
+Kristóf: "kuponoknál a type-ot se átadni nem tudom meg megse kapom"
+3. Telefonszám hiányzik az adattáblából
+4. Emailre a http://localhost:4200/verify?kod=KÓD -ot kellene kiküldeni, + egy http://localhost:8081/verify kell,
+ahova küldhetek postot egy code nevü stringet ezzel aktiválva
+5. Az ordersnél az időket nem a szerver oldalon kezeljük? Mármint a start és end timeot? Mert azokat is átadhatjuk a rendelés felvételekor
+itt formázási problémák lehetnek az idővel
+6. A felhasználó adatmódositásakor amikor megy egy put hogy updatelje az értékeket akkor azt irja, 
+hogy ilyen emailcimű felhasználó már létezik, mintha kreálni akarna egyet

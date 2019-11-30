@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
     if(registerForm.valid){
       if(values.password === values.confpassword){
         const adresses:AdressModel[] = [];
-        adresses.push({ postCode: values.postCode, adress: values.state.concat(", ",values.city,", ",values.adress), type: "TRANSPORT"});
+        adresses.push({ postCode: values.postCode, address: values.state.concat(", ",values.city,", ",values.address), type: "TRANSPORT"});
         this.authService.registerUser(
           values.username,
           values.password,

@@ -1,5 +1,5 @@
 export interface AdressModel{
   postCode: number;
-  adress:string;
+  address:string;
   type:string;
 }
