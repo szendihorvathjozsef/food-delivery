@@ -3,6 +3,7 @@ import { Food } from '../foods/food-model';
 import { OrderService } from '../order.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -16,7 +17,7 @@ export class CartComponent implements OnInit {
   isEmpty = true;
   totalCost = 0;
 
-  constructor(public orderService: OrderService) { }
+  constructor(private orderService: OrderService,private authService:AuthService) { }
 
   ngOnInit() {
     this.isEmpty = this.orderService.isOrderItemEmpty();
@@ -26,6 +27,8 @@ export class CartComponent implements OnInit {
       this.isEmpty = res.isEmpty;
       this.totalCost = res.totalCost;
     });
+    this.orderService.takeAnOrder();
+      
   }
 
   onSubmit(form:NgForm){
