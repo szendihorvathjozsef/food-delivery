@@ -1,0 +1,29 @@
+<!--
+<mat-tab-group>
+    <mat-tab *ngFor="let order of orders" [label]="First"> Content 1 </mat-tab>
+</mat-tab-group>
+-->
+<form #pendingRentalsForm="ngForm">
+    <mat-list role="list" *ngFor="let element of orders"  style="padding-left: 2%">
+        <mat-list-item role="név">
+            <h2>{{element.user.firstname + ' ' + element.user.lastname + ' ' + element.user.addresses.postCode + ' '+
+                 element.user.addresses.address}}</h2>
+        </mat-list-item>
+        <mat-list role="list" *ngFor="let food of element.orders">
+            <mat-list-item role="itemDetails">
+                {{food.item.name + ' ' + food.quantity}}
+            </mat-list-item>
+        </mat-list>
+
+        <mat-tab-group animationDuration="0ms"  (selectedTabChange)="send($event, element.id)" style="color: red">
+            <mat-tab label="Rendelés felvéve" > Rendelés felvéve </mat-tab>
+            <mat-tab label="Készül" > Készül </mat-tab>
+            <mat-tab label="Elkészült"  > Elkészült </mat-tab>
+            <mat-tab label="Kiszállítónak átadva"  > Kiszállítónak átadva </mat-tab>
+        </mat-tab-group>
+    </mat-list>
+</form>
+
+
+
+
