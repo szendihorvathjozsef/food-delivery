@@ -11,8 +11,7 @@ import { element } from 'protractor';
 export interface CouponElement {
   id: number,
   name: string,
-  percent: number,
-  itemType: string
+  percent: number
 }
 
 // const ELEMENT_DATA: CouponElement[] = [
@@ -48,8 +47,11 @@ export class CouponAddComponent implements OnInit {
     const percent = form.value.percent;
     console.log(name);
     console.log(percent);
+    
     this.couponService.addNewCoupon(name, percent).subscribe((res) => {
-    console.log(res);
+      console.log(res);
+      this.dataSource.data.push(res);
+      this.dataSource.data = [...this.dataSource.data];
     });
   }
 

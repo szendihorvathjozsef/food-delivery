@@ -6,8 +6,8 @@
 <form #pendingRentalsForm="ngForm">
     <mat-list role="list" *ngFor="let element of orders"  style="padding-left: 2%">
         <mat-list-item role="név">
-            <h2>{{element.name + ' ' + element.user.addresses[0].postCode + ' '+
-                 element.user.addresses[0].address}}</h2>
+            <h2>{{element.user.firstname + ' ' + element.user.lastname + ' ' + element.user.addresses.postCode + ' '+
+                 element.user.addresses.address}}</h2>
         </mat-list-item>
         <mat-list role="list" *ngFor="let food of element.orders">
             <mat-list-item role="itemDetails">
