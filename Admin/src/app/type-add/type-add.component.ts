@@ -5,11 +5,6 @@ import {map, startWith} from 'rxjs/operators'
 import { ItemService } from '../item-service/item.service';
 
 
-export interface State {
-  flag: string;
-  name: string;
-  population: string;
-}
 
 @Component({
   selector: 'app-type-add',

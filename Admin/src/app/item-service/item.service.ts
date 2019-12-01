@@ -69,8 +69,4 @@ export class ItemService {
   {
     return this.http.get<{item: string}[]>(this.url+"/item-allergens");
   }
-
-  addNewCoupon (coupon: {name:string, percent:number}){
-    return this.http.post<{isSuccess: boolean}>(this.url, coupon);
-  }
 }

@@ -12,11 +12,42 @@ export class OrderService {
 
   getPendingRentals()
   {
-    return this.http.get<{item: MegrenelesModel[]}>(this.url)
+    return this.http.get<{
+      "orders": {
+        "id": number
+        "totalCost": number,
+        "startTime": string,
+        "endTime": string,
+        "orders": [
+            {
+                "quantity": number,
+                "item": {
+                  "name": string
+                  "id": number
+                }
+            }
+        ],
+        "user": {
+            "login": string,
+            "password": string,
+            "firstName": string,
+            "lastName": string,
+            "email": string,
+            "phoneNumber": string,
+            "addresses": 
+                {
+                    "postCode": number,
+                    "address": string,
+                    "type": string
+                }[]
+        }
+      }
+    }[]>(this.url + "/orders/in-progress/")
   }
 
   modifyRentals(id: number[])
   {
+    console.log(id);
     return this.http.post<{isSuccess: boolean}>(this.url, id);
   }
 
@@ -25,8 +56,9 @@ export class OrderService {
     return this.http.get<{name:string, quantity:number }[]>(this.url+"/statistics/day/"+date);
   }
 
-  getPeriodStat(startDate: Date, endDate: Date)
+  getPeriodStat(startDate: string, endDate: string)
   {
-    return this.http.get<{item: {date: Date, income: number }[]}>(this.url)
+    console.log(startDate + " " + endDate);
+    return this.http.get<{date: Date, income: number }[]>(this.url + "/statistics/between/"+startDate +"/"+endDate);
   }
 }

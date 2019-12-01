@@ -19,7 +19,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatTableModule} from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,6 +33,7 @@ import { TypeAddComponent } from './type-add/type-add.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CouponAddComponent } from './coupon-add/coupon-add.component';
 import { DatePipe } from '@angular/common';
+import { AllergenAddComponent } from './allergen-add/allergen-add.component';
 
 
 
@@ -47,7 +48,8 @@ import { DatePipe } from '@angular/common';
     ItemAddComponent,
     ItemEditComponent,
     TypeAddComponent,
-    CouponAddComponent
+    CouponAddComponent,
+    AllergenAddComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +57,7 @@ import { DatePipe } from '@angular/common';
     AutocompleteLibModule,
     AppRoutingModule,
     ChartsModule,
+    MatTableModule,
     BrowserAnimationsModule,
     MatButtonModule,
     ReactiveFormsModule,
@@ -80,7 +83,8 @@ import { DatePipe } from '@angular/common';
       {path: 'item-add', component: ItemAddComponent},
       {path: 'type-add', component: TypeAddComponent},
       {path: 'coupon-add', component: CouponAddComponent},
-    ]),
+      {path: 'allergen-add', component: AllergenAddComponent},
+      ]),
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
