@@ -3,6 +3,7 @@ package food.delivery.services;
 import food.delivery.exceptions.StorageException;
 import food.delivery.exceptions.StorageFileNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -35,7 +36,16 @@ public class StorageService implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        rootLocation = Paths.get(folder);
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            rootLocation = Paths.get(SystemUtils.getUserDir() + folder);
+
+            if ( !Files.exists(rootLocation) ) {
+                Files.createDirectory(rootLocation);
+            }
+
+        } else {
+            rootLocation = Paths.get(folder);
+        }
     }
 
     public void store(MultipartFile file, String newName) {
