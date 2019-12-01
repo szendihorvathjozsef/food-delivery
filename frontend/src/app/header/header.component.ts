@@ -11,6 +11,7 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent implements OnInit {
   itemCount: number = 0;
   isAuth: boolean = false;
+  isAdmin:boolean = false;
 
   private itemCountListenerSub: Subscription;
   private authListenerSub: Subscription;
@@ -23,8 +24,9 @@ export class HeaderComponent implements OnInit {
       });
 
     this.authListenerSub = this.authService.getAuthListener()
-      .subscribe(isAuth => {
-        this.isAuth = isAuth;
+      .subscribe(({isAuth, isAdmin}) => {
+        this.isAuth = isAuth,
+        this.isAdmin = isAdmin
       });
     
     this.isAuth = this.authService.getAuth();

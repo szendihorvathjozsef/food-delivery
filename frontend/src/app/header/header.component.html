@@ -1,10 +1,10 @@
 <mat-toolbar color="primary">
     <span>EasyOrder</span>
 
-    <div class="leftMenuBar">
-        <button mat-button routerLink="/">Home</button>
-        <button mat-button routerLink="/food">Foods</button>
-        <button mat-button *ngIf="isAuth" routerLink="/profile">Profile</button>
+    <div class="leftMenuBar" >
+        <button mat-button routerLink="/" *ngIf="!isAdmin">>Home</button>
+        <button mat-button routerLink="/food" *ngIf="!isAdmin">Foods</button>
+        <button mat-button routerLink="/profile" *ngIf="!isAdmin && isAuth">Profile</button>
     </div>
 
     <span class="spacer"></span>

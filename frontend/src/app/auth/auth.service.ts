@@ -13,9 +13,10 @@ export class AuthService {
 
   private url = "http://localhost:8081";
   private isAuth = false;
+  private isAdmin = false;
   private token = null;
   private user: UserModel = null;
-  private authListener = new Subject<boolean>();
+  private authListener = new Subject<{isAuth:boolean,isAdmin:boolean}>();
 
   constructor(private http: HttpClient, private router: Router, private _snackBar: MatSnackBar) {   }
 
@@ -55,7 +56,10 @@ export class AuthService {
             this.isAuth = true;
             
             this.saveAuthData(this.user);
-            this.authListener.next(true);
+            if(res.authorities.find(auth => auth === 'ADMINISTATOR')){
+              this.isAdmin = true;
+            }
+            this.authListener.next({isAuth: true, isAdmin: this.isAdmin});
             this.router.navigate(['/']);
             this.openSnackBar("Successfully Logged In", "Welcome!");
           }
@@ -92,7 +96,8 @@ export class AuthService {
   logout() {
     this.token = null;
     this.isAuth = false;
-    this.authListener.next(false);
+    this.isAdmin = false;
+    this.authListener.next({isAuth: false, isAdmin: false});
     this.clearAuthData();
     this.router.navigate(['/']);
   }
@@ -103,7 +108,7 @@ export class AuthService {
       this.token = authInformation.token;
       this.user = authInformation.user;
       this.isAuth = true;
-      this.authListener.next(true);
+      this.authListener.next({isAuth: true, isAdmin: this.isAdmin});
     }
   }
 
@@ -118,6 +123,7 @@ export class AuthService {
     localStorage.setItem('status', user.status);
     localStorage.setItem('authorities', user.authorities);
     localStorage.setItem('adressnum', user.addresses.length.toString());
+    localStorage.setItem('isAdmin',this.isAdmin.toString());
     var i = 0;
     user.addresses.forEach(adress => {
       localStorage.setItem('postCode'+i, adress.postCode.toString());
@@ -140,6 +146,7 @@ export class AuthService {
     localStorage.removeItem('status');
     localStorage.removeItem('authorities');
     localStorage.removeItem('adressnum');
+    localStorage.removeItem('isAdmin');
     var i = 0;
     this.user.addresses.forEach(adress => {
       localStorage.removeItem(`postCode${i}`);
@@ -162,6 +169,7 @@ export class AuthService {
     const authorities: string = localStorage.getItem('authorities');
     const adressCount = +localStorage.getItem('adressnum');
     const addresses: AdressModel[] = [];
+    this.isAdmin = (localStorage.getItem('isAdmin') === "true")
     for (let i = 0; i < adressCount; i++) {
       addresses.push({
         postCode: +localStorage.getItem(`postCode${i}`),
