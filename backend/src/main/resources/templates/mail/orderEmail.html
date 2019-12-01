@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{email.order.title}">EasyOrder order success</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="#{email.order.greeting(${user.lastName}, ${user.firstName})}">
+    Dear
+</p>
+<p th:text="#{email.order.text1}">
+    Your EasyOrder food order has been added to our system. You ordered the following items:
+</p>
+<table>
+    <thead>
+        <tr>
+            <th th:text="#{email.order.item}">Item</th>
+            <th th:text="#{email.order.amount}">Amount</th>
+            <th th:text="#{email.order.price}">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="orderItem : ${order.orders}">
+            <td th:text="${orderItem.item.name}"></td>
+            <td th:text="#{email.order.token.amount(${orderItem.quantity})}"></td>
+            <td th:text="#{email.order.token.price(${orderItem.item.price * orderItem.quantity})}"></td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span th:text="#{email.order.text2}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">EasyOrder.</em>
+</p>
+</body>
+</html>

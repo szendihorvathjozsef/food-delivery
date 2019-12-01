@@ -1,6 +1,6 @@
 package food.delivery.web;
 
-import food.delivery.entities.Order;
+import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.DailyStatistics;
 import food.delivery.repositories.OrderRepository;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,10 +31,6 @@ public class StatisticsController extends BaseController {
         this.orderRepository = orderRepository;
     }
 
-
-    // mennyi termék egy napra
-    // kettő időpont között mennyi volt a bevétel
-
     @GetMapping("/day/{date}")
     public ResponseEntity<List<DailyStatistics>> getUsedItemForDay(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
@@ -46,7 +42,13 @@ public class StatisticsController extends BaseController {
     }
 
     @GetMapping("/between/{startDate}/{endDate}")
-    public void getIncome(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
+    public void getIncome(@PathVariable String startDate, @PathVariable String endDate) {
+        if ( startDate == null || endDate == null ) {
+            throw new BadRequestAlertException("No path variables", "statistics", "datesnull");
+        }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-DD");
+        LocalDate start = LocalDate.parse(startDate, formatter);
+        LocalDate end = LocalDate.parse(endDate, formatter);
     }
 }

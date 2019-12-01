@@ -6,59 +6,63 @@ Food delivery application
 * AddressType: BILLING | TRANSPORT
 * OrderStatus: ORDERED | IN_PROGRESS | FINISHED
 * UserStatus: ACTIVE | NEED_ACTIVATION | BANNED
+* Couponstatus: USED, UNUSED
 * Authorities = szerepkörök, jelenlegiek
     * USER
     * ADMINISTATOR
 * UserAddress : cím
+    * id: number
     * address: maga cím, várossal
     * postCode: irányítószám
     * type: AddressType
 * User
-  * Id: number
-  * Login: string
-  * FirstName: string
-  * LastName: string
-  * Email: string
-  * Status: UserStatus
-  * Authorities: string[]
-  * Addresses: UserAddress[]
-  * CreatedBy: string
-  * CreatedDate: timestamp
-  * LastModifiedBy: string
-  * LastModifiedDate: timestamp
+  * id: number
+  * login: string
+  * firstName: string
+  * lastName: string
+  * email: string
+  * status: UserStatus
+  * authorities: string[]
+  * addresses: UserAddress[]
+  * createdBy: string
+  * createdDate: timestamp
+  * lastModifiedBy: string
+  * lastModifiedDate: timestamp
 * Item
-  * Id: number
-  * Name: string
-  * Price: float
-  * Price: float
-  * KCal: number
-  * Protein: number
-  * Fat: number
-  * Carbs: number
-  * ImageName: string
-  * ItemType: string
-  * Allergens: string[]
+  * id: number
+  * name: string
+  * price: float
+  * kCal: number
+  * protein: number
+  * fat: number
+  * carbs: number
+  * imageName: string
+  * itemType: string
+  * allergens: string[]
 * OrderItem
-  * Id: number
-  * Quantity: number
-  * Order: Order //ignored
-  * Item: Item
+  * id: number
+  * quantity: number
+  * order: Order //ignored
+  * item: Item
 * Order
-  * Id: number
-  * TotalCost: double
-  * Status: OrderStatus
-  * StartTime: DateTime
-  * EndTime: DateTime
-  * CreatedOn: timestamp
-  * UpdatedOn: timestamp
-  * Orders: OrderItems[]
-  * User: User
+  * id: number
+  * totalCost: double
+  * status: OrderStatus
+  * startTime: DateTime
+  * endTime: DateTime
+  * createdOn: timestamp
+  * updatedOn: timestamp
+  * orders: OrderItems[]
+  * user: User
+* CouponType
+    * id: number
+    * name: string
+    * percent: number
 * Coupon
-  * Id: number
-  * Name: string
-  * Percent: number
-  * ItemType: string
-  * User: User
+  * id: number
+  * status: CouponStatus
+  * type: CouponType
+  * user: User
 
 A következő végpontok léteznek:  
 
@@ -93,7 +97,9 @@ Ezt várja a rendszer.
 {
   "firstName": "valami",
   "lastName": "valami2",
-  "email": "valami@valami.org"
+  "email": "valami@valami.org",
+  "phoneNumber": "+36301234567",
+  "addresses": []
 }
 ```
 * POST /account/change-password: jelszóváltoztatás  
@@ -133,7 +139,7 @@ Ezt várja a rendszer.
 ```
 
 * GET /users/{login}: login alapján lekérdezni egy felhasználót  
-login: felhasználónév
+login: felhasználónév vagy email cím
 
 * POST /users: felhasználó készítés  
 Ezt várja a rendszer.
@@ -213,25 +219,72 @@ Ezt várja a rendszer.
 * GET /orders : rendelés kilistázás
 
 * GET /orders/{orderId} : egy rendelés lekérése
-* POST /orders : rendelés felvétele
+* POST /orders :   
+rendelés felvétele regisztrált felhasználónál  
+kuponoknál a használt kuponokat kell beküldeni
 ```json
 {
-  "totalCost": 10000,
-  "startTime": "2019-11-27 12:58",
-  "endTime": "2019-11-27 13:58",
-  "orders": [
-    {
-      "quantity": 5,
-      "item": {
+  "coupons": [],
+  "order": {
+    "totalCost": 10000,
+    "startTime": "2019-11-27 12:58",
+    "endTime": "2019-11-27 13:58",
+    "orders": [
+        {
+            "quantity": 5,
+            "item": {
+              "id": 1
+            }
+        }
+    ],
+    "user": {
         "id": 1
-      }
     }
-  ],
-  "user": {
-    "id": 1
   }
 }
 ```
+
+* POST /orders :   
+rendelés felvétele nem regisztrált felhasználónál  
+kuponoknál a használt kuponokat kell beküldeni
+```json
+{
+  "order": {
+    "totalCost": 10000,
+    "startTime": "2019-11-27 12:58",
+    "endTime": "2019-11-27 13:58",
+    "orders": [
+        {
+            "quantity": 5,
+            "item": {
+              "id": 1
+            }
+        }
+    ],
+    "user": {
+        "login": "asd",
+        "password": "valami",
+        "firstName": "József",
+        "lastName": "Szendi-Horvtáh",
+        "email": "1alien971@gmail.com",
+        "phoneNumber": "+36301234567",
+        "addresses": [
+            {
+                "postCode": 8100,
+                "address": "Várpalota Magyari utca 4.",
+                "type": "TRANSPORT"
+            },
+            {
+                "postCode": 8100,
+                "address": "Várpalota Magyari utca 4.",
+                "type": "BILLING"
+            }
+        ] 
+    }
+  }
+}
+```
+
 * PUT /orders : rendelés módosítása
 ```json
 {
@@ -253,12 +306,27 @@ Ezt várja a rendszer.
 }
 ```
 * POST /orders/finish : rendelések befejezése  
-Item id megadása egy tömben
+Order id megadása egy tömben
 ```json
 [1, 2, 3]
 ```
 * DELETE /orders/{orderId} : rendelés törlése  
-Item id megadása egy tömben
+Item id megadása egy tömben  
+
+* GET /orders/user :   
+    * jelenleg bejelentkezett felhasználónak visszadja az összes rendelését
+* GET /orders/user/in-progress :  
+    * jelenleg bejelentkezett felhasználónak visszadja az összes folyamatban lévő rendelését
+    
+* GET /orders/in-progress : kilistázza az összes folyamatban lévő rendelést
+
+* POST /orders/finished  
+A rendelések id-jei
+```json
+{
+  "ids": [1, 2, 3]
+}
+```
 
 **Allergének kezelése**
 
@@ -289,27 +357,35 @@ Item id megadása egy tömben
 
 * GET /coupons : kuponok listázása
 
-* POST /coupons : kupon hozzáadása
+* POST /coupons : kupon létrehozása
+    * Alapból UNUSED ként jön létre
 ```json
 {
-  "name": "",
-  "percent": 0,
-  "itemType": "",
-}
-```
-
-* PUT /coupons : kupon módosítása
-```json
-{
-  "id": 1,
-  "name": "",
-  "percent": 0,
-  "itemType": "",
+    "type": {
+        "id": 1
+    },
+    "user": {
+        "id": 1
+    }
 }
 ```
 
 * DELETE /coupons/{couponId} : kupon törlése
 
+* GET /coupons/unused : bejelentkezett felhasználó fel nem használt kuponjai
+* GET /coupons/used: bejelentkezett felhasználó felhasznált kuponjai 
+
+**Kupon típus kezelése**
+
+* GET /coupon-types : kuponok listázása
+* POST /coupon-types : kupon létrehozása
+```json
+{
+	"name": "test2",
+	"percent": 100
+}
+```
+* DELETE /coupon-types/{couponId} : kupon törlése
 
 **Statisztika**
 

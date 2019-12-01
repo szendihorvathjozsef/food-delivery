@@ -1,12 +1,9 @@
 package food.delivery.services.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import food.delivery.entities.OrderItem;
-import food.delivery.util.enums.OrderStatus;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;

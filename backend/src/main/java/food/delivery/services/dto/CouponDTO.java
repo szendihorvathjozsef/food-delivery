@@ -1,20 +1,21 @@
 package food.delivery.services.dto;
 
+import food.delivery.util.enums.CouponStatus;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author szendihorvath
  */
 @Data
+@RequiredArgsConstructor
 public class CouponDTO {
 
     private Long id;
 
-    private String name;
+    private CouponStatus status;
 
-    private Integer percent;
-
-    private String itemType;
+    private CouponTypeDTO type;
 
     private UserDTO user;
 

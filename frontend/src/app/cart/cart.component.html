@@ -1,4 +1,4 @@
-<form class="example-form" #form="ngForm" (ngSubmit)="onSubmit(form)">
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
   <mat-horizontal-stepper #stepper>
     <!-- Mat Stepper - Order Details -->
     <mat-step>
@@ -43,54 +43,112 @@
       <ng-template matStepLabel>Order Details</ng-template>
       <mat-card>
         <mat-card-content>
+          <!-- -->
+          <label>The billing address is the same as the ordering address </label>
+          <mat-radio-group>
+            <mat-radio-button [checked]="isMatch" (click)="adressChangeStatus(true)" value="true">
+              Yes
+            </mat-radio-button>
+            <mat-radio-button [checked]="!isMatch"  (click)="adressChangeStatus(false)" value="false">
+              No
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-tab-group>
+            <mat-tab label="Transport Adress">
+              <!-- Transport Adress-->
+              <!-- Adress -->
+              <p>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Address" name="address"
+                    [ngModel]="this.user?.addresses[0]?.address.split(', ')[2]" required>
+                </mat-form-field>
+              </p>
+
+              <!-- Adress - City State PostCode -->
+              <table class="example-full-width" cellspacing="0">
+                <tr>
+                  <td>
+                    <!-- City -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="City" name="city"
+                        [ngModel]="this.user?.addresses[0]?.address.split(', ')[1]" required>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- State -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="State" name="state"
+                        [ngModel]="this.user?.addresses[0]?.address.split(', ')[0]" required>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- Post Code -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput #postalCode maxlength="4" placeholder="Postal Code" name="postCode"
+                        [ngModel]="this.user.addresses[0]?.postCode" required minlength="4">
+                      <mat-hint align="end">{{postalCode.value.length}} / 4</mat-hint>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+
+            </mat-tab>
+            <mat-tab label="Billing Adress" [disabled]="this.isMatch">
+              <!-- BILLING Adress-->
+              <!-- Adress -->
+              <p>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Address" name="address2" [required]="!isMatch"
+                    [ngModel]="this.user?.addresses[1]?.address.split(', ')[2]">
+                </mat-form-field>
+              </p>
+
+              <!-- Adress - City State PostCode -->
+              <table class="example-full-width" cellspacing="0">
+                <tr>
+                  <td>
+                    <!-- City -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="City" name="city2" [required]="!isMatch"
+                        [ngModel]="this.user?.addresses[1]?.address.split(', ')[1]">
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- State -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="State" name="state2" [required]="!isMatch"
+                        [ngModel]="this.user?.addresses[1]?.address.split(', ')[0]">
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- Post Code -->
+                    <mat-form-field class="example-full-width">
+                      <input matInput #postalCode maxlength="4" placeholder="Postal Code" name="postCode2" [required]="!isMatch"
+                        [ngModel]="this.user.addresses[1]?.postCode" minlength="4">
+                      <mat-hint align="end">{{postalCode.value.length}} / 4</mat-hint>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+
+            </mat-tab>
+          </mat-tab-group>
           <!-- First name, Last name Table-->
           <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="First name" name="firstName" [(ngModel)]="firstName" required>
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Last name" name="lastName" [(ngModel)]="lastName" required>
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
+              <tr>
+                <td>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="First name" name="firstName" [ngModel]="this.user?.firstname" required>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Last name" name="lastName" [ngModel]="this.user?.firstname" required>
+                  </mat-form-field>
+                </td>
+              </tr>
+            </table>
 
-          <!-- Adress -->
-          <p>
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Address" name="adress" [(ngModel)]="adress" required>
-            </mat-form-field>
-          </p>
-
-          <!-- Adress - City State PostCode -->
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <!-- City -->
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="City" name="city" [(ngModel)]="city" required>
-                </mat-form-field>
-              </td>
-              <td>
-                <!-- State -->
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="State" name="state" [(ngModel)]="state" required>
-                </mat-form-field>
-              </td>
-              <td>
-                <!-- Post Code -->
-                <mat-form-field class="example-full-width">
-                  <input matInput #postalCode maxlength="4" placeholder="Postal Code" name="postCode" [(ngModel)]="postCode" required
-                    minlength="4">
-                  <mat-hint align="end">{{postalCode.value.length}} / 4</mat-hint>
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
 
           <p>
             <mat-form-field>
@@ -103,15 +161,16 @@
 
           <p>
             <mat-form-field>
-              <input matInput placeholder="Phone number" name="phoneNumber" [(ngModel)]="phoneNumber" required>
+              <input matInput placeholder="Phone number" name="phoneNumber" [ngModel]="this.user?.phonenumber" required>
             </mat-form-field>
           </p>
 
 
           <!-- Prev Next Buttons -->
           <div class="next-prev-buttons">
-            <button mat-button matStepperPrevious>Previous</button>
-            <button mat-button matStepperNext [disabled]="form.invalid">Next</button>
+            <button mat-button type="button" matStepperPrevious>Previous</button>
+            <button mat-button type="button" matStepperNext [disabled]="form.invalid"
+              (click)="loadDetails(form)">Next</button>
           </div>
         </mat-card-content>
       </mat-card>
@@ -126,19 +185,21 @@
           <mat-divider></mat-divider>
           <mat-card>
             <mat-card-content>
-                <h6><strong>Name: </strong>{{ firstName + " " + lastName }}</h6>
-                <h6><strong>Adress: </strong>{{ postCode + ", " + state + ", " + city + ", " + adress }}</h6>
-                <h6><strong>Payment Method: </strong>{{ paymentMethod }}</h6>
-                <h6><strong>Phone Number: </strong>{{ phoneNumber }}</h6>
+              <h6><strong>Name: </strong>{{ this.user?.firstname + " " + this.user?.lastname }}</h6>
+              <h6 *ngFor="let address of this.user.addresses"><strong> {{address?.type | titlecase }} Adress:</strong>
+                {{ address?.postCode + ", " + address?.address }}
+              </h6>
+              <h6><strong>Payment Method: </strong>{{ paymentMethod }}</h6>
+              <h6><strong>Phone Number: </strong>{{ this.user?.phonenumber }}</h6>
             </mat-card-content>
           </mat-card>
           <br>
           <mat-card>
-              <mat-card-content>
-                <h5><strong>Total Cost: </strong>{{ phoneNumber }}</h5>
-              </mat-card-content>
-            </mat-card>
-          
+            <mat-card-content>
+              <h5><strong>Total Cost: </strong>{{ totalCost }}</h5>
+            </mat-card-content>
+          </mat-card>
+
           <div>
             <button mat-button matStepperPrevious>Previous</button>
             <button mat-button type="submit" color="primary">Submit</button>

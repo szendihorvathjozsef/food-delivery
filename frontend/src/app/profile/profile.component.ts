@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CouponModel } from './coupon.model';
+import { ProfileService } from './profile.service';
+import { AuthService } from '../auth/auth.service';
+import { AdressModel } from '../auth/adress.model';
 
 @Component({
   selector: 'app-profile',
@@ -8,46 +11,81 @@ import { CouponModel } from './coupon.model';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  username: string;
+  userAdress: AdressModel[];
+  status:string;
 
-  coupons: CouponModel[] = [
-    {id: 1, name:"Pizza coupon", percentage: 0.15, itemType: "Pizza" },
-    { id: 2, name:"Pasta coupon", percentage: 0.20, itemType: "Pasta" },
-    {id: 3, name:"Drink coupon", percentage: 0.50, itemType: "Drink" }
-  ]
+  adressData:{ icon:string, name:string, title:string, value:string }[];
+  contactsData:{ icon:string, name:string, title:string, value:string }[];
+  coupons: CouponModel[] = [];
 
-  username: string = "Dohny Johny";
-  postCode: string = "1015";
-  state: string = "Pest";
-  adress: string = "Budapest, Sajt utca 4.";
-  email:string = "dohn.john@gmail.com";
-  phone:string = "+36205669872";
-  fullName: string = "Dohn Jon Andreas";
-  adressData:{ icon:string, name:string, title:string, value:string }[] = [
-    {icon: "drafts", name: "postCode", title: "Post Code:", value: this.postCode },
-    {icon: "flag", name: "state", title: "State:", value: this.state },
-    {icon: "location_city", name: "adress", title: "Adress:", value: this.adress }
-  ]
-
-  contactsData:{ icon:string, name:string, title:string, value:string }[] = [
-    {icon: "email", name: "email", title: "Email Adress:", value: this.email },
-    {icon: "phone", name: "phone", title: "State:", value: this.phone },
-    {icon: "person", name: "name", title: "Full Name:", value: this.adress }
-  ]
   editMode:string = 'none';
-  constructor() { }
+  constructor(private profileService:ProfileService,private authService: AuthService) { }
 
   ngOnInit() {
+    this.username = this.authService.getUser().username;
+    const user = this.authService.getUser();
+    this.username = user.username;
+    this.adressData = [
+      {icon: "drafts", name: "postCode", title: "Post Code:", value: user.addresses[0].postCode.toString() },
+      {icon: "location_city", name: "address", title: "Adress:", value: user.addresses[0].address }
+    ]
+
+    this.contactsData = [
+      {icon: "email", name: "email", title: "Email Adress:", value: user.email },
+      {icon: "phone", name: "phone", title: "State:", value: user.phonenumber },
+      {icon: "person", name: "name", title: "Full Name:", value: user.firstname.concat(" ", user.lastname) }
+    ];
+
+    this.profileService.getCoupons().subscribe(res => {
+      res.forEach(coupon => {
+        this.coupons.push({
+          id: coupon.id,
+          name: coupon.name,
+          percentage: coupon.percent / 100,
+          itemType: coupon.itemType
+        });
+      });
+    });
   }
 
   doubleClick(editMode: string){
     this.editMode = editMode;
-    console.log(editMode);
+  }
+
+  editData(form:NgForm){
+    const firstname:string = form.value.name.split(" ")[0];
+    const lastname:string = form.value.name.split(" ")[1];
+    const email:string = form.value.email;
+    const phonenumber:string = form.value.phone;
+    const address:AdressModel = {
+      postCode: +form.value.postCode,
+      address: form.value.address,
+      type:"TRANSPORT"
+    };
+
+    this.contactsData[0].value = email;
+    this.contactsData[1].value = phonenumber;
+    this.contactsData[2].value = form.value.name;
+    this.authService.modifyUser(firstname,lastname,email,phonenumber,address);
+
+    this.profileService.updateUserInformation(this.username,firstname,lastname,email,phonenumber,this.authService.getUser().addresses).subscribe(res=>{
+      this.authService.openSnackBar("Your Details Changed!","");
+    });
+    this.editMode = 'none';
   }
 
   changePassword(form: NgForm){
     if(form.valid){
-      if(form.value.newPassword == form.value.newPasswordverify){
-        console.log("Change Password Auth Service");
+      const values = form.value;
+      if(values.newPassword == values.newPasswordverify){
+        console.log(values.oldPassword);
+        this.profileService.changePassword(values.oldPassword,values.newPassword).subscribe(res => {
+          if(res == null){
+            form.resetForm();
+            this.authService.openSnackBar("Password Updated","Success");
+          }
+        });
       }
     }
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Food } from './food-model';
 import { MatDialog } from '@angular/material/dialog';
 import foods from '../../assets/foods.json';
+import { FoodService } from './food.service';
 
 @Component({
   selector: 'app-foods',
@@ -10,14 +11,33 @@ import foods from '../../assets/foods.json';
 })
 export class FoodsComponent implements OnInit {
 
-  itemTypes = ["Pizza's","Hamburgers","Pasta's","Desserts","Drinks"];
+  itemTypes = [];
   foods: Food[] = [];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,private foodService:FoodService) { }
 
   ngOnInit() {
-    foods.foods.forEach(food => {
-      this.foods.push(food);
+    this.foodService.getTypes().subscribe( res => {
+      res.forEach(item => {
+        if(!this.itemTypes.find(type => type == item.itemType)){
+          this.itemTypes.push(item.itemType);
+        }
+
+        this.foods.push({
+          id: item.id,
+          picture: item.imageName,
+          name: item.name,
+          price: item.price,
+          allergens: item.allergens,
+          kcal: item.kcal,
+          protein: item.protein,
+          fat: item.fat,
+          carbs: item.carbs,
+          foodType: item.itemType,
+        });
+      });
+      
+      console.log(res);
     });
   }
 

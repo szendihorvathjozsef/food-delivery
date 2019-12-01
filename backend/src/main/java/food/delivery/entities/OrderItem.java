@@ -2,6 +2,8 @@ package food.delivery.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "order_item")
+@EqualsAndHashCode(exclude = {"order"})
+@ToString(exclude = {"order"})
 public class OrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
