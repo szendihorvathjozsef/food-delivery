@@ -225,7 +225,7 @@ kuponoknál a használt kuponokat kell beküldeni
 ```json
 {
   "coupons": [],
-  "orders": {
+  "order": {
     "totalCost": 10000,
     "startTime": "2019-11-27 12:58",
     "endTime": "2019-11-27 13:58",
@@ -249,7 +249,7 @@ rendelés felvétele nem regisztrált felhasználónál
 kuponoknál a használt kuponokat kell beküldeni
 ```json
 {
-  "orders": {
+  "order": {
     "totalCost": 10000,
     "startTime": "2019-11-27 12:58",
     "endTime": "2019-11-27 13:58",
