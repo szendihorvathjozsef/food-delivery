@@ -72,7 +72,6 @@ public class ItemController extends BaseController {
             throw new BadRequestAlertException("A new item cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-
         Item itemEntity = itemMapper.toEntity(item);
         itemEntity.setImageName("");
         itemEntity = itemRepository.save(itemEntity);
