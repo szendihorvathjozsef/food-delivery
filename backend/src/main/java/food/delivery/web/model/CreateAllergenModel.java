@@ -1,5 +1,6 @@
 package food.delivery.web.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
