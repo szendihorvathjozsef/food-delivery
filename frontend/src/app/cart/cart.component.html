@@ -157,11 +157,23 @@
                 <mat-option [value]="method" *ngFor="let method of paymentMethods">{{ method }}</mat-option>
               </mat-select>
             </mat-form-field>
+            <mat-form-field *ngIf="coupons">
+              <mat-label>Coupons</mat-label>
+              <mat-select name="coupon" [(ngModel)]="coupon">
+                <mat-option [value]="coupon.id" *ngFor="let coupon of coupons">{{ coupon.name + " " + (coupon.percentage *100) + "%" }}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </p>
 
           <p>
             <mat-form-field>
               <input matInput placeholder="Phone number" name="phoneNumber" [ngModel]="this.user?.phonenumber" required>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field>
+              <input matInput placeholder="Email Address" name="emailaddress" [ngModel]="this.user?.email" minlength="6" required email>
             </mat-form-field>
           </p>
 
@@ -191,12 +203,14 @@
               </h6>
               <h6><strong>Payment Method: </strong>{{ paymentMethod }}</h6>
               <h6><strong>Phone Number: </strong>{{ this.user?.phonenumber }}</h6>
+              <h6><strong>Email Address: </strong>{{ this.user?.email }}</h6>
             </mat-card-content>
           </mat-card>
           <br>
           <mat-card>
             <mat-card-content>
               <h5><strong>Total Cost: </strong>{{ totalCost }}</h5>
+              <h5 *ngIf="selectedCoupon"><strong>Kedvezményes Ár: </strong>{{ totalCost - (totalCost * selectedCoupon.percentage) }}</h5>
             </mat-card-content>
           </mat-card>
 

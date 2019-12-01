@@ -18,8 +18,8 @@
         </form>
     </mat-tab>
 
-    <mat-tab label="Időszakos bevételi adatok">
-        <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
+    <mat-tab label="Időszakos bevételi adatok" disabled="true">
+        <!--<div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
             <mat-form-field style="margin-left:auto;margin-right:auto;display:block; width: 40%">
                 <input matInput [matDatepicker]="pickerStart" placeholder="Kezdő nap" [formControl]="startDate"
                     (ngModelChange)="getPeriodStatStart($event)" name="startDate" [(ngModel)]="startDatePicker">
@@ -35,6 +35,6 @@
             <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [legend]="lineChartLegend"
                 [chartType]="lineChartType">
             </canvas>
-        </div>
+        </div>-->
     </mat-tab>
 </mat-tab-group>

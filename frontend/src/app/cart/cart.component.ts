@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { UserModel } from '../auth/user.model';
+import { CouponModel } from '../profile/coupon.model';
+import { ProfileService } from '../profile/profile.service';
 
 @Component({
   selector: 'app-cart',
@@ -20,8 +22,9 @@ export class CartComponent implements OnInit {
   paymentMethods: string[] = ["Card", "Cash", "Nice Card"];
   isEmpty = true;
   totalCost = 0;
-
-  constructor(private orderService: OrderService,private authService:AuthService) { }
+  selectedCoupon:CouponModel;
+  coupons:CouponModel[];
+  constructor(private orderService: OrderService,private authService:AuthService,private profileService:ProfileService) { }
 
   ngOnInit() {
     this.isMatch ;
@@ -38,6 +41,17 @@ export class CartComponent implements OnInit {
         status:null,
         addresses: []
       };
+    } else {
+      this.coupons = [];
+      this.profileService.getCoupons().subscribe(res => {
+        res.forEach(item => {
+          this.coupons.push({
+            id: item.id,
+            name: item.type.name,
+            percentage: item.type.percent / 100
+          });
+        });
+      });
     }
     this.isEmpty = this.orderService.isOrderItemEmpty();
     this.totalCost = this.orderService.getTotalCost();
@@ -50,7 +64,7 @@ export class CartComponent implements OnInit {
 
   onSubmit(form:NgForm){
     if(form.valid){
-      this.orderService.takeAnOrder();
+      this.orderService.takeAnOrder(this.user,this.selectedCoupon);
     }
   }
   adressChangeStatus(isMatch:boolean) {
@@ -62,6 +76,8 @@ export class CartComponent implements OnInit {
     this.user.firstname = form.value.firstName;
     this.user.lastname = form.value.lastName;
     this.user.phonenumber = form.value.phoneNumber;
+    this.user.email = form.value.emailaddress;
+    this.selectedCoupon = this.coupons.find(coupon => coupon.id == form.value.coupon);
     this.user.addresses = [];
     this.user.addresses.push({
       postCode: form.value.postCode,
@@ -77,6 +93,5 @@ export class CartComponent implements OnInit {
         type: "BILLING"
       });
     }
-    console.log(this.user);
   }
 }

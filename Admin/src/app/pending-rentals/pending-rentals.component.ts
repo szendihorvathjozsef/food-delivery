@@ -11,106 +11,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./pending-rentals.component.css']
 })
 export class PendingRentalsComponent implements OnInit {
-  orders: MegrenelesModel[] = [
-    {
-      id: 6,
-      user: {
-        firstName: "Szende",
-        lastName: "Zsombor",
-        id: 12,
-        login: "Beregos",
-        email: "zsombor-",
-        status: "string",
-        authorites: ["", ""],
-        addresses: [{ address: "Veszprém Vár utca 20.", postCode: 8200, type: "TRANSPORT" }]
-      },
-      totalCost: 600,
-      status: "Pending",
-      startTime: new Date('2019-11-28'),
-      endTime: new Date('2019-11-28'),
-      orders: [
-        {
-          quantity: 6,
-          item: {
-            id: 1,
-            picture: "string",
-            name: "pizza",
-            price: 300,
-            kcal: 500,
-            protein: 10,
-            fat: 10,
-            carbs: 10,
-            foodType: "jó",
-            allergens: ["Pizza", "valami"]
-          }
-        },
-        {
-          quantity: 6,
-          item: {
-            id: 1,
-            picture: "string",
-            name: "pizza",
-            price: 300,
-            kcal: 500,
-            protein: 10,
-            fat: 10,
-            carbs: 10,
-            foodType: "jó",
-            allergens: ["Pizza", "valami"]
-          }
-        }
-      ]
-    },
-    {
-      id: 2,
-      user: {
-        firstName: "Szende",
-        lastName: "Zsombor",
-        id: 12,
-        login: "Beregos",
-        email: "zsombor-",
-        status: "string",
-        authorites: ["", ""],
-        addresses: [{ address: "Veszprém Vár utca 20.", postCode: 8200, type: "TRANSPORT" }]
-      },
-      totalCost: 600,
-      status: "Pending",
-      startTime: new Date('2019-11-28'),
-      endTime: new Date('2019-11-28'),
-      orders: [
-        {
-          quantity: 6,
-          item: {
-            id: 1,
-            picture: "string",
-            name: "pizza",
-            price: 300,
-            kcal: 500,
-            protein: 10,
-            fat: 10,
-            carbs: 10,
-            foodType: "jó",
-            allergens: ["Pizza", "valami"]
-          }
-        },
-        {
-          quantity: 6,
-          item: {
-            id: 1,
-            picture: "string",
-            name: "pizza",
-            price: 300,
-            kcal: 500,
-            protein: 10,
-            fat: 10,
-            carbs: 10,
-            foodType: "jó",
-            allergens: ["Pizza", "valami"]
-          }
-        }
-      ]
-    }
-  ]
+  orders: MegrenelesModel[] = []
   panelOpenState = false;
   /*orders: {
     name: string,
@@ -134,36 +35,53 @@ export class PendingRentalsComponent implements OnInit {
   constructor(private orderService: OrderService) { }
 
   ngOnInit() {
-    // this.orderService.getPendingRentals().subscribe((res) => { 
-    //   console.log(res);
-    //   res.forEach(element => {
-    //     const order = {
-    //       name: element.orders.user.firstName + " " + element.orders.user.lastName,
-    //       addresses: element.orders.user.addresses,
-    //       orders: element.orders.orders,
-    //       id: element.orders.id
-    //     };
-    //     this.orders.push(order);
-    //   });
-    // });
+    this.orderService.getPendingRentals().subscribe(res => {
+      console.log("ASD" + res[0].id);
+      console.log(res);
+      const orders: { quantity: number, item: { name: string } }[] = [];
+      res.forEach(result => {
+        result.orders.forEach(order => {
+          orders.push({
+            quantity: order.quantity,
+            item: {
+              name: order.item.name
+            }
+          });
+        });
+
+        this.orders.push({
+          id: result.id,
+          orders: orders,
+          totalCost: result.totalCost,
+          user: {
+            addresses: {
+              address: result.user.addresses[0].address,
+              postCode: result.user.addresses[0].postCode
+            },
+            firstname: result.user.firstName,
+            lastname: result.user.lastName,
+            phonenumber: result.user.phoneNumber
+          }
+        });
+      });
+      console.log(this.orders);
+    })
+
+
   }
 
   //egy ID-t fogunk visszaadni mindig nem egy tömböt
-  modifyRentals(id: number[]) {
 
-    this.orderService.modifyRentals(id).subscribe((res) => {
-      console.log(res.isSuccess);
-    });
-  }
 
-  send($event, id)
-  {
-    if($event.index == 3)
-    {
+  send($event, id) {
+    if ($event.index == 3) {
 
       console.log("Elkészült clicked " + id);
-      const finished: number [] = [id];
-      this.orderService.modifyRentals(finished);
+      const finished: number[] = [id];
+      this.orders = this.orders.filter(data => data.id !== id);
+      this.orderService.finishRentals(finished).subscribe(res => {
+        console.log(res);
+      });
     }
   }
 
