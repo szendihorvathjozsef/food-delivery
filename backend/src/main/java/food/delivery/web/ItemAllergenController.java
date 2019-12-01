@@ -5,6 +5,7 @@ import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.ItemAllergenRepository;
 import food.delivery.services.mapper.ItemAllergenMapper;
 import food.delivery.util.HeaderUtil;
+import food.delivery.web.model.AllergenModel;
 import food.delivery.web.model.CreateAllergenModel;
 import food.delivery.web.model.CreateMoreAllergenModel;
 import food.delivery.web.model.DeleteMoreAllergenModel;
@@ -47,14 +48,18 @@ public class ItemAllergenController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody CreateAllergenModel createAllergenModel) throws URISyntaxException {
+    public ResponseEntity<AllergenModel> create(@Valid @RequestBody CreateAllergenModel createAllergenModel) throws URISyntaxException {
         log.debug("REST request to create Allergen: {}", createAllergenModel);
 
         ItemAllergen itemAllergen = itemAllergenMapper.toEntity(createAllergenModel.getAllergen());
         itemAllergen = itemAllergenRepository.save(itemAllergen);
+
+        AllergenModel allergenModel = new AllergenModel();
+        allergenModel.setAllergen(itemAllergen.getName());
+
         return ResponseEntity.created(new URI("/item-allergens"))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, itemAllergen.getName()))
-                .body(itemAllergenMapper.toDto(itemAllergen));
+                .body(allergenModel);
     }
 
     @PostMapping("/more")
