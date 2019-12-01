@@ -77,7 +77,11 @@ export class CartComponent implements OnInit {
     this.user.lastname = form.value.lastName;
     this.user.phonenumber = form.value.phoneNumber;
     this.user.email = form.value.emailaddress;
-    this.selectedCoupon = this.coupons.find(coupon => coupon.id == form.value.coupon);
+    if(this.authService.getAuth()){
+      if(this.coupons.find(coupon => coupon.id == form.value.coupon)){
+        this.selectedCoupon = this.coupons.find(coupon => coupon.id == form.value.coupon);
+      }
+    }
     this.user.addresses = [];
     this.user.addresses.push({
       postCode: form.value.postCode,

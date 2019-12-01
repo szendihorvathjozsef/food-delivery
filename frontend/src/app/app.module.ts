@@ -4,7 +4,8 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule } from '@angular/forms';
+import {ChartsModule} from 'ng2-charts';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
@@ -42,6 +43,16 @@ import { OrderTableComponent } from './cart/order-table/order-table.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
+import { PendingRentalsComponent } from './admin/pending-rentals/pending-rentals.component';
+import { StatisticsComponent } from './admin/statistics/statistics.component';
+import { ItemAddComponent } from './admin/item-add/item-add.component';
+import { ItemEditComponent } from './admin/item-edit/item-edit.component';
+import { TypeAddComponent } from './admin/type-add/type-add.component';
+import { CouponAddComponent } from './admin/coupon-add/coupon-add.component';
+import { DatePipe } from '@angular/common';
+import { AllergenAddComponent } from './admin/allergen-add/allergen-add.component';
+import { MatDatepicker, MatDatepickerModule, MatFormFieldModule, MatChipsModule, MatAutocompleteModule, MatNativeDateModule, MatFormFieldControl } from '@angular/material';
+
 
 
 @NgModule({
@@ -56,7 +67,14 @@ import { AuthGuard } from './auth/auth.guard';
     CartComponent,
     FoodComponent,
     OrderTableComponent,
-    ProfileComponent
+    ProfileComponent,
+    PendingRentalsComponent,
+    StatisticsComponent,
+    ItemAddComponent,
+    ItemEditComponent,
+    TypeAddComponent,
+    CouponAddComponent,
+    AllergenAddComponent
   ],
   entryComponents: [
     FoodInfoDialogComponent
@@ -85,6 +103,14 @@ import { AuthGuard } from './auth/auth.guard';
     MatCheckboxModule,
     MatExpansionModule,
     MatRadioModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    ChartsModule,
+    MatChipsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
     RouterModule.forRoot([
       { path: '' , component: HomeComponent},
       { path: 'food' , component: FoodsComponent},
@@ -92,11 +118,18 @@ import { AuthGuard } from './auth/auth.guard';
       { path: 'register' , component: RegisterComponent},
       { path: 'cart' , component: CartComponent },
       { path: 'profile' , component: ProfileComponent, canActivate:[AuthGuard] },
+      {path: 'statistics', component: StatisticsComponent},
+      {path: 'pending-rentals', component: PendingRentalsComponent},
+      {path: 'item-edit', component: ItemEditComponent},
+      {path: 'item-add', component: ItemAddComponent},
+      {path: 'type-add', component: TypeAddComponent},
+      {path: 'coupon-add', component: CouponAddComponent},
+      {path: 'allergen-add', component: AllergenAddComponent},
       {path: '**', redirectTo: ''}
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard, DatePipe
   ],
   bootstrap: [AppComponent]
 })
