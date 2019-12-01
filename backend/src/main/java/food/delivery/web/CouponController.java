@@ -55,13 +55,13 @@ public class CouponController extends BaseController {
         return new ResponseEntity<>(couponMapper.toDto(coupons), HttpStatus.OK);
     }
 
-    @GetMapping("/active")
+    /*@GetMapping("/active")
     public ResponseEntity<List<CouponDTO>> listActiveByUser() {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         log.debug("REST request to list unused Coupons by User: {}", userLogin);
         List<Coupon> coupons = couponRepository.findAllByUser_LoginAndStatus(userLogin, CouponStatus.ACTIVE);
         return new ResponseEntity<>(couponMapper.toDto(coupons), HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping("/used")
     public ResponseEntity<List<CouponDTO>> listUsedByUsER() {
@@ -71,7 +71,7 @@ public class CouponController extends BaseController {
         return new ResponseEntity<>(couponMapper.toDto(coupons), HttpStatus.OK);
     }
 
-    @GetMapping("/activate/{id}")
+    /*@GetMapping("/activate/{id}")
     public ResponseEntity<CouponDTO> activate(@PathVariable Long id) {
         log.debug("REST request to activate Coupon: {}", id);
 
@@ -82,7 +82,7 @@ public class CouponController extends BaseController {
                 couponService.activateCoupon(id),
                 HeaderUtil.createAlert(applicationName, "couponManagement.updated", id.toString())
         );
-    }
+    }*/
 
     @GetMapping("/use/{id}")
     public ResponseEntity<CouponDTO> use(@PathVariable Long id) {

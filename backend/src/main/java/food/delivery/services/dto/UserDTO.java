@@ -70,6 +70,9 @@ public class UserDTO implements Serializable {
         this.authorities = user.getAuthorities().stream()
                 .map(Authority::getName)
                 .collect(Collectors.toSet());
+        this.addresses = user.getAddresses().stream()
+                .map(UserAddressDTO::new)
+                .collect(Collectors.toSet());
     }
 
 }
