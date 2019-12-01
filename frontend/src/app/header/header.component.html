@@ -1,36 +1,49 @@
 <mat-toolbar color="primary">
     <span>EasyOrder</span>
 
-    <div class="leftMenuBar" >
-        <button mat-button routerLink="/" *ngIf="!isAdmin">>Home</button>
-        <button mat-button routerLink="/food" *ngIf="!isAdmin">Foods</button>
-        <button mat-button routerLink="/profile" *ngIf="!isAdmin && isAuth">Profile</button>
+    <div class="leftMenuBar">
+        <button mat-button routerLink="/">Home</button>
+        <button mat-button routerLink="/food">Foods</button>
+        <button mat-button routerLink="/profile" *ngIf="isAuth">Profile</button>
+        <button mat-button [matMenuTriggerFor]="menu2" *ngIf="isAuth && isAdmin">Admin Modules</button>
+        <mat-menu #menu2="matMenu" *ngIf="isAuth && isAdmin">
+            <button mat-menu-item routerLink="/pending-rentals">Pending Rentals</button>
+            <button mat-menu-item routerLink="/item-add">Add Item</button>
+            <button mat-menu-item routerLink="/item-edit">Edit Item</button>
+            <button mat-menu-item routerLink="/type-add">Add Type</button>
+            <button mat-menu-item routerLink="/coupon-add">Add Coupon</button>
+            <button mat-menu-item routerLink="/allergen-add">Add Allergen</button>
+            <button mat-menu-item routerLink="/statistics">Statistics</button>
+
+        </mat-menu>
     </div>
+
 
     <span class="spacer"></span>
 
     <div class="rightMenuBar">
-        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent">
+        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent"
+            *ngIf="!isAdmin">
             <i class="fas fa-shopping-cart"></i>
             Cart
         </button>
 
         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button *ngIf="!isAuth" mat-menu-item routerLink="/login">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Login</span>
             </button>
-            <mat-menu #menu="matMenu">
-                <button *ngIf="!isAuth" mat-menu-item routerLink="/login">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Login</span>
-                </button>
-                <button *ngIf="!isAuth" mat-menu-item routerLink="/register">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Register</span>
-                </button>
-                <button *ngIf="isAuth" mat-menu-item (click)="logout()">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Logout</span>
-                </button>
+            <button *ngIf="!isAuth" mat-menu-item routerLink="/register">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Register</span>
+            </button>
+            <button *ngIf="isAuth" mat-menu-item (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+            </button>
         </mat-menu>
     </div>
 

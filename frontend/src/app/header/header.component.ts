@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
       });
     
     this.isAuth = this.authService.getAuth();
+    this.isAdmin = this.authService.getisAdmin();
   }
 
   logout(){

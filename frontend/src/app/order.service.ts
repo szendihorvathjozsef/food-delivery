@@ -20,7 +20,7 @@ export class OrderService {
     private itemEmptyListener = new Subject<{ isEmpty: boolean, totalCost: number }>();
     private url: string = "http://localhost:8081";
 
-    constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
+    constructor(private http: HttpClient, private authService: AuthService, private router: Router,private datePipe:DatePipe) { }
 
     addOrderItem(food: Food) {
         this.itemCount++;
@@ -85,9 +85,9 @@ export class OrderService {
         this.itemCountListener.next(this.itemCount);
     }
 
-    takeAnOrder(user:UserModel,coupon:CouponModel) {
+    takeAnOrder(user: UserModel, coupon: CouponModel) {
         var order;
-
+        const startTime = this.datePipe.transform(new Date(Date.now()),'yyyy-MM-dd hh:mm');
         const orders: { quantity: number, item: { id: number } }[] = [];
         this.orderItems.forEach(item => {
             orders.push({
@@ -98,28 +98,31 @@ export class OrderService {
             });
         });
         if (this.authService.getUser()) {
-            if(coupon){
+            if (coupon) {
                 this.totalCost -= this.totalCost * coupon.percentage;
             }
             order = {
-                coupons: [{id:coupon.id}],
+                coupons: [],
                 order: {
                     totalCost: this.totalCost,
-                    startTime: "2019-11-27 12:58",
-                    endTime: "2019-11-27 13:58",
+                    startTime: startTime,
+                    endTime: null,
                     orders: orders,
                     user: {
                         id: this.authService.getUser().id
                     }
                 }
             };
+            if (coupon) {
+                order.coupons.push({ id: coupon.id });
+            }
         } else {
 
             order = {
                 order: {
                     totalCost: this.totalCost,
-                    startTime: "2019-11-27 12:58",
-                    endTime: "2019-11-27 13:58",
+                    startTime: startTime,
+                    endTime: null,
                     orders: orders,
                     user: {
                         login: "asd",
@@ -134,29 +137,28 @@ export class OrderService {
             }
         }
 
-            console.log(order);
-            this.http.post(this.url + "/orders", order).subscribe(res => {
-                this.authService.openSnackBar("Order Recorded", "Check Your Email Adress!");
-                this.orderItems = [];
-                this.totalCost = 0;
-                this.itemCount = 0;
-                this.itemCountListener.next(0);
-                this.itemEmptyListener.next({ isEmpty: true, totalCost: 0 });
-                this.router.navigate(['/']);
-            });
-        }
-
-        // Getters
-
-        getItemCountListener() {
-            return this.itemCountListener;
-        }
-
-        getItemEmptyListener() {
-            return this.itemEmptyListener;
-        }
-
-        getOrderItems() {
-            return [...this.orderItems];
-        }
+        this.http.post(this.url + "/orders", order).subscribe(res => {
+            this.authService.openSnackBar("Order Recorded", "Check Your Email Adress!");
+            this.orderItems = [];
+            this.totalCost = 0;
+            this.itemCount = 0;
+            this.itemCountListener.next(0);
+            this.itemEmptyListener.next({ isEmpty: true, totalCost: 0 });
+            this.router.navigate(['/']);
+        });
     }
+
+    // Getters
+
+    getItemCountListener() {
+        return this.itemCountListener;
+    }
+
+    getItemEmptyListener() {
+        return this.itemEmptyListener;
+    }
+
+    getOrderItems() {
+        return [...this.orderItems];
+    }
+}

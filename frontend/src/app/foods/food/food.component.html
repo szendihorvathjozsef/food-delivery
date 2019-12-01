@@ -4,7 +4,7 @@
           <mat-card-title>{{food.name}}</mat-card-title>
           <mat-card-subtitle>Item</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src={{food.picture}} alt="Photo Of The Item" (click)="openDialog(food)">
+        <img mat-card-image [src]="food.picture"alt="Photo Of The Item" (click)="openDialog(food)">
         <mat-card-content>
           <p>
             Price: {{ food.price }}

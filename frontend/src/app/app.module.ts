@@ -18,13 +18,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatMenuModule} from '@angular/material/menu';
+
 
 
 
@@ -52,6 +53,8 @@ import { CouponAddComponent } from './admin/coupon-add/coupon-add.component';
 import { DatePipe } from '@angular/common';
 import { AllergenAddComponent } from './admin/allergen-add/allergen-add.component';
 import { MatDatepicker, MatDatepickerModule, MatFormFieldModule, MatChipsModule, MatAutocompleteModule, MatNativeDateModule, MatFormFieldControl } from '@angular/material';
+import { AdminGuard } from './auth/admin.guard';
+import { VerifyComponent } from './verify/verify.component';
 
 
 
@@ -74,7 +77,8 @@ import { MatDatepicker, MatDatepickerModule, MatFormFieldModule, MatChipsModule,
     ItemEditComponent,
     TypeAddComponent,
     CouponAddComponent,
-    AllergenAddComponent
+    AllergenAddComponent,
+    VerifyComponent
   ],
   entryComponents: [
     FoodInfoDialogComponent
@@ -111,6 +115,7 @@ import { MatDatepicker, MatDatepickerModule, MatFormFieldModule, MatChipsModule,
     MatAutocompleteModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatMenuModule,
     RouterModule.forRoot([
       { path: '' , component: HomeComponent},
       { path: 'food' , component: FoodsComponent},
@@ -118,18 +123,19 @@ import { MatDatepicker, MatDatepickerModule, MatFormFieldModule, MatChipsModule,
       { path: 'register' , component: RegisterComponent},
       { path: 'cart' , component: CartComponent },
       { path: 'profile' , component: ProfileComponent, canActivate:[AuthGuard] },
-      {path: 'statistics', component: StatisticsComponent},
-      {path: 'pending-rentals', component: PendingRentalsComponent},
-      {path: 'item-edit', component: ItemEditComponent},
-      {path: 'item-add', component: ItemAddComponent},
-      {path: 'type-add', component: TypeAddComponent},
-      {path: 'coupon-add', component: CouponAddComponent},
-      {path: 'allergen-add', component: AllergenAddComponent},
+      {path: 'statistics', component: StatisticsComponent, canActivate:[AdminGuard]},
+      {path: 'pending-rentals', component: PendingRentalsComponent, canActivate:[AdminGuard]},
+      {path: 'item-edit', component: ItemEditComponent, canActivate:[AdminGuard]},
+      {path: 'item-add', component: ItemAddComponent, canActivate:[AdminGuard]},
+      {path: 'type-add', component: TypeAddComponent, canActivate:[AdminGuard]},
+      {path: 'coupon-add', component: CouponAddComponent, canActivate:[AdminGuard]},
+      {path: 'allergen-add', component: AllergenAddComponent, canActivate:[AdminGuard]},
+      {path:'verify/:key',component:VerifyComponent},
       {path: '**', redirectTo: ''}
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard, DatePipe
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard, AdminGuard, DatePipe
   ],
   bootstrap: [AppComponent]
 })

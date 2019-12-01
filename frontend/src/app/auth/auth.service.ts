@@ -56,7 +56,7 @@ export class AuthService {
             this.isAuth = true;
             
             this.saveAuthData(this.user);
-            if(res.authorities.find(auth => auth === 'ADMINISTATOR')){
+            if(res.authorities.find(auth => auth === 'ADMINISTRATOR')){
               this.isAdmin = true;
             }
             this.authListener.next({isAuth: true, isAdmin: this.isAdmin});
@@ -206,6 +206,17 @@ export class AuthService {
     this.user.phonenumber = phoneNumber;
     this.user.addresses[0] = address;
     this.saveAuthData(this.user);
+  }
+
+  activateUser(key:string){
+    this.http.get(`${this.url}/activate?key=${key}`).subscribe(res => {
+      this.openSnackBar("Activated Successfully!","Activated User");
+        this.router.navigate(['/']);
+    });
+  }
+
+  getisAdmin() {
+    return this.isAdmin
   }
 
   getUser() {

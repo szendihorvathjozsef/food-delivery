@@ -25,7 +25,7 @@ export class FoodsComponent implements OnInit {
 
         this.foods.push({
           id: item.id,
-          picture: item.imageName,
+          picture: "http://localhost:8081/items/image/"+item.imageName,
           name: item.name,
           price: item.price,
           allergens: item.allergens,
@@ -36,8 +36,6 @@ export class FoodsComponent implements OnInit {
           foodType: item.itemType,
         });
       });
-      
-      console.log(res);
     });
   }
 
