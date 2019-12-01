@@ -112,7 +112,7 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderModel orderModel) throws URISyntaxException {
+    public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderModel orderModel) {
         log.debug("REST request to save Order: {}", orderModel.getOrder());
 
         OrderDTO order = orderModel.getOrder();
@@ -122,12 +122,21 @@ public class OrderController extends BaseController {
             throw new BadRequestAlertException("A new order cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        OrderDTO result = orderService.createNewOrder(order, coupons);
-        newOrderEventPublisher.publish(result);
-        mailService.sendOrderMail(result.getUser(), result);
-        return ResponseEntity.created(new URI("/orders/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                .body(result);
+        Long resultId = orderService.createNewOrder(order, coupons);
+
+        Optional<OrderDTO> result = Optional.of(orderRepository.findById(resultId))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(o -> orderMapper.toDto(o, TimeZone.getDefault()));
+
+        if ( result.isPresent() ) {
+            newOrderEventPublisher.publish(result.get());
+            mailService.sendOrderMail(result.get().getUser(), result.get());
+        }
+        return ResponseUtil.wrapOrNotFound(
+                result,
+                HeaderUtil.createAlert(applicationName, "orderManagement.created", "")
+        );
     }
 
     @PutMapping

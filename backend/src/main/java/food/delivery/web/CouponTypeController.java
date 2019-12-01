@@ -3,6 +3,7 @@ package food.delivery.web;
 import food.delivery.entities.CouponType;
 import food.delivery.exceptions.BadRequestAlertException;
 import food.delivery.repositories.CouponTypeRepository;
+import food.delivery.services.CouponService;
 import food.delivery.services.dto.CouponTypeDTO;
 import food.delivery.services.mapper.CouponTypeMapper;
 import food.delivery.util.HeaderUtil;
@@ -27,10 +28,12 @@ public class CouponTypeController extends BaseController {
 
     private final CouponTypeMapper couponTypeMapper;
     private final CouponTypeRepository couponTypeRepository;
+    private final CouponService couponService;
 
-    public CouponTypeController(CouponTypeMapper couponTypeMapper, CouponTypeRepository couponTypeRepository) {
+    public CouponTypeController(CouponTypeMapper couponTypeMapper, CouponTypeRepository couponTypeRepository, CouponService couponService) {
         this.couponTypeMapper = couponTypeMapper;
         this.couponTypeRepository = couponTypeRepository;
+        this.couponService = couponService;
     }
 
     @GetMapping
@@ -49,7 +52,7 @@ public class CouponTypeController extends BaseController {
         }
 
         CouponType couponType = couponTypeMapper.toEntity(couponTypeDTO);
-        couponType = couponTypeRepository.save(couponType);
+        couponType = couponService.createCouponType(couponType);
         CouponTypeDTO result = couponTypeMapper.toDto(couponType);
         return ResponseEntity.created(new URI("/orders/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

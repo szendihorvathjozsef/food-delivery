@@ -54,7 +54,7 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
-    public OrderDTO createNewOrder(OrderDTO orderDTO, List<CouponDTO> couponDTOS) {
+    public Long createNewOrder(OrderDTO orderDTO, List<CouponDTO> couponDTOS) {
         Order order = orderMapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.ORDERED);
 
@@ -62,7 +62,6 @@ public class OrderService {
             User user = userService.createAnonymousUser(orderDTO.getUser());
             order.setUser(user);
         }
-
         if (!CollectionUtils.isEmpty(couponDTOS)) {
             couponDTOS.forEach(coupon -> couponService.useCoupon(coupon.getId()));
         }
@@ -72,9 +71,9 @@ public class OrderService {
                 .peek(orderItem -> orderItem.setOrder(order))
                 .collect(Collectors.toSet());
 
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
         orderItemRepository.saveAll(orderItems);
 
-        return orderMapper.toDto(order, TimeZone.getDefault());
+        return order.getId();
     }
 }
