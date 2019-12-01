@@ -24,16 +24,16 @@ import {MatTableModule} from '@angular/material/table';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PendingRentalsComponent } from './pending-rentals/pending-rentals.component';
-import { HeaderComponent } from './header/header.component';
-import { StatisticsComponent } from './statistics/statistics.component';
-import { ItemAddComponent } from './item-add/item-add.component';
-import { ItemEditComponent } from './item-edit/item-edit.component';
-import { TypeAddComponent } from './type-add/type-add.component';
+import { PendingRentalsComponent } from './admin/pending-rentals/pending-rentals.component';
+import { HeaderComponent } from './admin/header/header.component';
+import { StatisticsComponent } from './admin/statistics/statistics.component';
+import { ItemAddComponent } from './admin/item-add/item-add.component';
+import { ItemEditComponent } from './admin/item-edit/item-edit.component';
+import { TypeAddComponent } from './admin/type-add/type-add.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CouponAddComponent } from './coupon-add/coupon-add.component';
+import { CouponAddComponent } from './admin/coupon-add/coupon-add.component';
 import { DatePipe } from '@angular/common';
-import { AllergenAddComponent } from './allergen-add/allergen-add.component';
+import { AllergenAddComponent } from './admin/allergen-add/allergen-add.component';
 
 
 
