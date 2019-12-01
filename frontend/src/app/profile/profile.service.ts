@@ -42,7 +42,7 @@ export class ProfileService {
   }
 
   getCoupons() {
-    return this.http.get<{id:number,name:string,percent:number,itemType:string,user:string}[]>(this.url + "/coupons");
+    return this.http.get<{id:number,type:{name:string,percent:number}}[]>(this.url + "/coupons/unused");
   }
 
   changePassword(currentPassword: string, newPassword:string){

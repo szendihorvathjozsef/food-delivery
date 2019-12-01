@@ -38,12 +38,11 @@ export class ProfileComponent implements OnInit {
     ];
 
     this.profileService.getCoupons().subscribe(res => {
-      res.forEach(coupon => {
+      res.forEach(item => {
         this.coupons.push({
-          id: coupon.id,
-          name: coupon.name,
-          percentage: coupon.percent / 100,
-          itemType: coupon.itemType
+          id: item.id,
+          name: item.type.name,
+          percentage: item.type.percent / 100
         });
       });
     });

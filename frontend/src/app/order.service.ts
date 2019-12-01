@@ -5,6 +5,9 @@ import { Food } from './foods/food-model';
 import { Subject } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { UserModel } from './auth/user.model';
+import { CouponModel } from './profile/coupon.model';
 
 @Injectable({ providedIn: "root" })
 export class OrderService {
@@ -17,7 +20,7 @@ export class OrderService {
     private itemEmptyListener = new Subject<{ isEmpty: boolean, totalCost: number }>();
     private url: string = "http://localhost:8081";
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
+    constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
     addOrderItem(food: Food) {
         this.itemCount++;
@@ -82,21 +85,25 @@ export class OrderService {
         this.itemCountListener.next(this.itemCount);
     }
 
-    takeAnOrder() {
+    takeAnOrder(user:UserModel,coupon:CouponModel) {
         var order;
-        if (this.authService.getUser().id) {
-            const orders: {quantity:number,item:{id:number}}[] = [];
-            this.orderItems.forEach(item => {
-                orders.push({
-                    quantity: item.quantity,
-                    item: {
-                        id: item.id
-                    }
-                });
+
+        const orders: { quantity: number, item: { id: number } }[] = [];
+        this.orderItems.forEach(item => {
+            orders.push({
+                quantity: item.quantity,
+                item: {
+                    id: item.id
+                }
             });
+        });
+        if (this.authService.getUser()) {
+            if(coupon){
+                this.totalCost -= this.totalCost * coupon.percentage;
+            }
             order = {
-                coupons: [],
-                orders: {
+                coupons: [{id:coupon.id}],
+                order: {
                     totalCost: this.totalCost,
                     startTime: "2019-11-27 12:58",
                     endTime: "2019-11-27 13:58",
@@ -106,24 +113,50 @@ export class OrderService {
                     }
                 }
             };
+        } else {
+
+            order = {
+                order: {
+                    totalCost: this.totalCost,
+                    startTime: "2019-11-27 12:58",
+                    endTime: "2019-11-27 13:58",
+                    orders: orders,
+                    user: {
+                        login: "asd",
+                        password: "valami",
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        email: user.email,
+                        phoneNumber: user.phonenumber,
+                        addresses: user.addresses
+                    }
+                }
+            }
+        }
+
             console.log(order);
-            this.http.post(this.url + "/orders", order).subscribe( res => {
-                console.log(res);
+            this.http.post(this.url + "/orders", order).subscribe(res => {
+                this.authService.openSnackBar("Order Recorded", "Check Your Email Adress!");
+                this.orderItems = [];
+                this.totalCost = 0;
+                this.itemCount = 0;
+                this.itemCountListener.next(0);
+                this.itemEmptyListener.next({ isEmpty: true, totalCost: 0 });
+                this.router.navigate(['/']);
             });
         }
-    }
 
-    // Getters
+        // Getters
 
-    getItemCountListener() {
-        return this.itemCountListener;
-    }
+        getItemCountListener() {
+            return this.itemCountListener;
+        }
 
-    getItemEmptyListener() {
-        return this.itemEmptyListener;
-    }
+        getItemEmptyListener() {
+            return this.itemEmptyListener;
+        }
 
-    getOrderItems() {
-        return [...this.orderItems];
+        getOrderItems() {
+            return [...this.orderItems];
+        }
     }
-}
