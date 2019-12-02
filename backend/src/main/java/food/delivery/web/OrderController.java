@@ -130,7 +130,6 @@ public class OrderController extends BaseController {
                 .map(o -> orderMapper.toDto(o, TimeZone.getDefault()));
 
         if ( result.isPresent() ) {
-            System.out.println(result.get());
             newOrderEventPublisher.publish(result.get());
             mailService.sendOrderMail(result.get().getUser(), result.get());
         }
