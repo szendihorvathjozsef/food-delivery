@@ -4,6 +4,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { DatePipe, getLocaleDateFormat } from '@angular/common';
 
 import * as _moment from 'moment';
+import { defaultColors } from 'ng2-charts';
 const moment = _moment;
 
 @Component({
@@ -20,10 +21,11 @@ export class StatisticsComponent implements OnInit {
   public pieChartLabels: string []  = [""];
   public pieChartData: number [] = [1];
   public pieChartType = 'pie';
-
   public barChartOptions = {
     scaleShowVerticalLines: false,
-    responsive: true
+    responsive: true,
+    defaultColors: false,
+    defaults: true
   };
 
 
@@ -41,6 +43,7 @@ export class StatisticsComponent implements OnInit {
   ngOnInit() {
   }
 
+
   getDailystat(date:Date)
   {
     console.log(this.datePipe.transform(date, 'yyyy-MM-dd'));
@@ -48,9 +51,11 @@ export class StatisticsComponent implements OnInit {
       console.log(res);
       this.pieChartLabels = [];
       this.pieChartData = [];
+      this.pieChartColors = [];
       res.forEach(element => {
         this.pieChartLabels.push(element.name);
         this.pieChartData.push(element.quantity);
+        
       });
       if (res.length == 0)
       {

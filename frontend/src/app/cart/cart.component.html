@@ -210,7 +210,7 @@
           <mat-card>
             <mat-card-content>
               <h5><strong>Total Cost: </strong>{{ totalCost }}</h5>
-              <h5 *ngIf="selectedCoupon"><strong>Kedvezményes Ár: </strong>{{ totalCost - (totalCost * selectedCoupon.percentage) }}</h5>
+              <h5 *ngIf="selectedCoupon"><strong>Discount Price </strong>{{ totalCost - (totalCost * selectedCoupon.percentage) }}</h5>
             </mat-card-content>
           </mat-card>
 

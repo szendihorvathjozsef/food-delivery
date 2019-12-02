@@ -12,9 +12,9 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class ItemAddComponent implements OnInit {
 
-  constructor(private itemService: ItemService,private authService:AuthService) { }
-  types:string[];
-  file=null;
+  constructor(private itemService: ItemService, private authService: AuthService) { }
+  types: string[];
+  file = null;
 
   ngOnInit() {
 
@@ -24,11 +24,11 @@ export class ItemAddComponent implements OnInit {
 
     this.itemService.getAllergens().subscribe((res) => {
       res.forEach(element => {
-        this.listAllergen.push({name: element.toString(), selected:false});
+        this.listAllergen.push({ name: element.toString(), selected: false });
       });
     });
   }
-  listAllergen: {name:string,selected:boolean}[] = [];
+  listAllergen: { name: string, selected: boolean }[] = [];
 
 
 
@@ -37,7 +37,7 @@ export class ItemAddComponent implements OnInit {
     const allergens: string[] = [];
 
     this.listAllergen.forEach(allergen => {
-      if(allergen.selected){
+      if (allergen.selected) {
         allergens.push(allergen.name);
       }
     });
@@ -54,10 +54,10 @@ export class ItemAddComponent implements OnInit {
       allergens: allergens
     }
 
-    if(this.file){
+    if (this.file) {
       const uploadData = new FormData();
       uploadData.append('file', this.file, this.file.name);
-      uploadData.append('itemName',values.name);
+      uploadData.append('itemName', values.name);
       this.itemService.addNewItem(food).subscribe((res) => {
         this.itemService.uploadImage(uploadData).subscribe(res => {
           form.resetForm();
@@ -65,7 +65,9 @@ export class ItemAddComponent implements OnInit {
         });
       });
     }
-
+    this.listAllergen.forEach(item => {
+      item.selected = false;
+    });
   }
 
   changeAllergenStatus($event, allergenName) {
@@ -74,7 +76,7 @@ export class ItemAddComponent implements OnInit {
   }
 
 
-  onFileChanged(event){
+  onFileChanged(event) {
     this.file = event.target.files[0];
   }
 
