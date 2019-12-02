@@ -124,11 +124,11 @@ import { VerifyComponent } from './verify/verify.component';
       { path: 'cart' , component: CartComponent },
       { path: 'profile' , component: ProfileComponent, canActivate:[AuthGuard] },
       {path: 'statistics', component: StatisticsComponent, canActivate:[AdminGuard]},
-      {path: 'pending-rentals', component: PendingRentalsComponent, canActivate:[AdminGuard]},
+      {path: 'pending-orders', component: PendingRentalsComponent, canActivate:[AdminGuard]},
       {path: 'item-edit', component: ItemEditComponent, canActivate:[AdminGuard]},
       {path: 'item-add', component: ItemAddComponent, canActivate:[AdminGuard]},
       {path: 'type-add', component: TypeAddComponent, canActivate:[AdminGuard]},
-      {path: 'coupon-add', component: CouponAddComponent, canActivate:[AdminGuard]},
+      {path: 'coupon', component: CouponAddComponent, canActivate:[AdminGuard]},
       {path: 'allergen-add', component: AllergenAddComponent, canActivate:[AdminGuard]},
       {path:'verify/:key',component:VerifyComponent},
       {path: '**', redirectTo: ''}

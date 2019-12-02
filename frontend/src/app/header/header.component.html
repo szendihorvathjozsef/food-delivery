@@ -6,12 +6,12 @@
         <button mat-button routerLink="/food">Foods</button>
         <button mat-button routerLink="/profile" *ngIf="isAuth">Profile</button>
         <button mat-button [matMenuTriggerFor]="menu2" *ngIf="isAuth && isAdmin">Admin Modules</button>
-        <mat-menu #menu2="matMenu" *ngIf="isAuth && isAdmin">
-            <button mat-menu-item routerLink="/pending-rentals">Pending Rentals</button>
+        <mat-menu #menu2="matMenu">
+            <button mat-menu-item routerLink="/pending-orders">Pending Orders</button>
             <button mat-menu-item routerLink="/item-add">Add Item</button>
             <button mat-menu-item routerLink="/item-edit">Edit Item</button>
             <button mat-menu-item routerLink="/type-add">Add Type</button>
-            <button mat-menu-item routerLink="/coupon-add">Add Coupon</button>
+            <button mat-menu-item routerLink="/coupon">Coupons</button>
             <button mat-menu-item routerLink="/allergen-add">Add Allergen</button>
             <button mat-menu-item routerLink="/statistics">Statistics</button>
 
@@ -22,8 +22,7 @@
     <span class="spacer"></span>
 
     <div class="rightMenuBar">
-        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent"
-            *ngIf="!isAdmin">
+        <button mat-button routerLink="/cart" [matBadge]="itemCount" matBadgePosition="after" matBadgeColor="accent">
             <i class="fas fa-shopping-cart"></i>
             Cart
         </button>

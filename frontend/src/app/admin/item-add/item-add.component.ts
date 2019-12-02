@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EtelModel } from '../pending-rentals/etel.model';
 import { ItemService } from '../item-service/item.service';
 import { NgForm } from '@angular/forms';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { NgForm } from '@angular/forms';
 })
 export class ItemAddComponent implements OnInit {
 
-  constructor(private itemService: ItemService) { }
+  constructor(private itemService: ItemService,private authService:AuthService) { }
   types:string[];
   file=null;
 
@@ -59,7 +60,8 @@ export class ItemAddComponent implements OnInit {
       uploadData.append('itemName',values.name);
       this.itemService.addNewItem(food).subscribe((res) => {
         this.itemService.uploadImage(uploadData).subscribe(res => {
-          console.log(res);
+          form.resetForm();
+          this.authService.openSnackBar("Item Added Successfully", "Success");
         });
       });
     }

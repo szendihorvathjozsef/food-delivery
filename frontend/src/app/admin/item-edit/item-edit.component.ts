@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ItemService } from '../item-service/item.service';
 import { AllergenModel } from '../pending-rentals/allergen.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-item-edit',
@@ -18,13 +19,14 @@ export class ItemEditComponent implements OnInit {
   myControl = new FormControl();
 
   items: EtelModel[] = [];
-  types:string[] = [];
+  types: string[] = [];
+  file;
   filteredOptions: Observable<EtelModel[]>;
   selected: EtelModel;
   listAllergen: { name: string, selected: boolean }[] = [];
 
 
-  constructor(private itemService: ItemService) {
+  constructor(private itemService: ItemService, private authService: AuthService) {
 
   }
   ngOnInit() {
@@ -65,7 +67,7 @@ export class ItemEditComponent implements OnInit {
     const allergens: string[] = [];
 
     this.listAllergen.forEach(allergen => {
-      if(allergen.selected){
+      if (allergen.selected) {
         allergens.push(allergen.name);
       }
     });
@@ -83,15 +85,25 @@ export class ItemEditComponent implements OnInit {
       picture: null,
       allergens: allergens
     }
+    if (this.file) {
+      const uploadData = new FormData();
+      uploadData.append('file', this.file, this.file.name);
+      uploadData.append('itemName', food.name);
+      this.itemService.modifyItem(food).subscribe((res) => {
+        this.itemService.uploadImage(uploadData).subscribe(res => {
+          this.selected = null;
+          this.filteredOptions = new Observable();
+          form.resetForm();
+          this.authService.openSnackBar("Item Edited Successfully", "Success");
+        });
 
-    this.itemService.modifyItem(food).subscribe((res) => {
-      console.log(res);
-      this.selected = null;
-      this.filteredOptions = new Observable();
-      form.reset();
-    });
+      });
+    }
   }
 
+  onFileChanged(event) {
+    this.file = event.target.files[0];
+  }
 
   private _filter(value: string): EtelModel[] {
     console.log(this.items);
@@ -102,15 +114,13 @@ export class ItemEditComponent implements OnInit {
           if (option.name == value) {
             this.selected = option;
             this.selected.allergens.forEach(allergen => {
-            this.listAllergen.forEach(element => {
-              if(element.name == allergen)
-              {
-                element.selected = true;
-              }
-            });
+              this.listAllergen.forEach(element => {
+                if (element.name == allergen) {
+                  element.selected = true;
+                }
+              });
             });
           }
-          console.log(this.selected);
           return option;
         }
       }

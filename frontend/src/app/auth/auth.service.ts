@@ -55,10 +55,10 @@ export class AuthService {
             }
             this.isAuth = true;
             
-            this.saveAuthData(this.user);
             if(res.authorities.find(auth => auth === 'ADMINISTRATOR')){
               this.isAdmin = true;
             }
+            this.saveAuthData(this.user);
             this.authListener.next({isAuth: true, isAdmin: this.isAdmin});
             this.router.navigate(['/']);
             this.openSnackBar("Successfully Logged In", "Welcome!");

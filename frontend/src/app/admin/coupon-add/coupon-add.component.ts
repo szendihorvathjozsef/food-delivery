@@ -5,6 +5,7 @@ import { ItemService } from '../item-service/item.service';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { element } from 'protractor';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 //táblázathoz a modell
@@ -29,13 +30,11 @@ export interface CouponElement {
 export class CouponAddComponent implements OnInit {
 
 
-  constructor(private couponService: CouponService) { }
+  constructor(private couponService: CouponService,private authService:AuthService) { }
   types: string[];
   dataSource = new MatTableDataSource<CouponElement>();
   ngOnInit() {
     this.couponService.getCoupon().subscribe(res => {
-      console.log("Kuponok:");
-      console.log(res);
       this.dataSource = new MatTableDataSource<CouponElement>(res);
     });
   }
@@ -45,11 +44,10 @@ export class CouponAddComponent implements OnInit {
   addNewCoupon(form: NgForm) {
     const name = form.value.name;
     const percent = form.value.percent;
-    console.log(name);
-    console.log(percent);
     
     this.couponService.addNewCoupon(name, percent).subscribe((res) => {
-      console.log(res);
+      this.authService.openSnackBar("Coupon Added Successfully", "Success");
+      form.resetForm();
       this.dataSource.data.push(res);
       this.dataSource.data = [...this.dataSource.data];
     });
@@ -84,11 +82,10 @@ export class CouponAddComponent implements OnInit {
   }
 
   deleteSend($event) {
-    console.log(this.selection.selected);
     this.selection.selected.forEach(element => {
       this.dataSource.data = this.dataSource.data.filter(data => data.id !== element.id);
       this.couponService.deleteCoupon(element.id).subscribe(res => {
-        console.log(res);
+        this.authService.openSnackBar("Coupon Deleted Successfully", "Success");
       });
     });
   }

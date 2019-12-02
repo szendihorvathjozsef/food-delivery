@@ -1,11 +1,11 @@
 <mat-tab-group>
 
-    <mat-tab label="Napi adatok">
+    <mat-tab label="Daily Statistics">
         <form>
             <div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
                 <mat-form-field
                     style="padding-bottom: 2%; margin-left:auto;margin-right:auto;display:block; width: 40%">
-                    <input matInput [matDatepicker]="picker" placeholder="Nap kiválasztása"
+                    <input matInput [matDatepicker]="picker" placeholder="Date Pick"
                         (ngModelChange)="getDailystat($event)" name="dayPicker" 
                         [(ngModel)]="dailyPicker">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -18,7 +18,7 @@
         </form>
     </mat-tab>
 
-    <mat-tab label="Időszakos bevételi adatok" disabled="true">
+    <mat-tab label="Periodical Statistics" disabled="true">
         <!--<div style="width: 60%; height: 60%; margin-left:auto;margin-right:auto">
             <mat-form-field style="margin-left:auto;margin-right:auto;display:block; width: 40%">
                 <input matInput [matDatepicker]="pickerStart" placeholder="Kezdő nap" [formControl]="startDate"
