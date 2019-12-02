@@ -88,7 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+        /*.and()
             .authorizeRequests()
             .antMatchers("/**").permitAll()
             .antMatchers("/authentication").permitAll()
@@ -108,7 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/coupons/active").authenticated()
             .antMatchers("/coupons/activate").authenticated()
             .antMatchers("/coupons/unused").authenticated()
-            .antMatchers("/**").hasAuthority("ADMINISTRATOR")
+            .antMatchers("/**").hasAuthority("ADMINISTRATOR")*/
         .and()
             .httpBasic()
         .and()
