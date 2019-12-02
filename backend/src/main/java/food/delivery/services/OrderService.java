@@ -1,33 +1,26 @@
 package food.delivery.services;
 
 import food.delivery.entities.Order;
-import food.delivery.entities.OrderItem;
 import food.delivery.entities.User;
-import food.delivery.exceptions.AccountResourceException;
 import food.delivery.repositories.OrderItemRepository;
 import food.delivery.repositories.OrderRepository;
-import food.delivery.security.SecurityUtils;
 import food.delivery.services.dto.CouponDTO;
 import food.delivery.services.dto.OrderDTO;
 import food.delivery.services.mapper.OrderItemMapper;
 import food.delivery.services.mapper.OrderMapper;
 import food.delivery.util.enums.OrderStatus;
-import food.delivery.web.AccountController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * @author szendihorvath
  */
 @Service
-@Transactional
 @Slf4j
 public class OrderService {
 
@@ -37,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemMapper orderItemMapper;
     private final OrderItemRepository orderItemRepository;
+    private final EntityManager entityManager;
 
     public OrderService(
             OrderMapper orderMapper,
@@ -44,17 +38,18 @@ public class OrderService {
             CouponService couponService,
             OrderRepository orderRepository,
             OrderItemMapper orderItemMapper,
-            OrderItemRepository orderItemRepository
-    ) {
+            OrderItemRepository orderItemRepository,
+            EntityManager entityManager) {
         this.orderMapper = orderMapper;
         this.userService = userService;
         this.couponService = couponService;
         this.orderRepository = orderRepository;
         this.orderItemMapper = orderItemMapper;
         this.orderItemRepository = orderItemRepository;
+        this.entityManager = entityManager;
     }
 
-    public Long createNewOrder(OrderDTO orderDTO, List<CouponDTO> couponDTOS) {
+    public Optional<Order> createNewOrder(OrderDTO orderDTO, List<CouponDTO> couponDTOS) {
         Order order = orderMapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.ORDERED);
 
@@ -66,14 +61,9 @@ public class OrderService {
             couponDTOS.forEach(coupon -> couponService.useCoupon(coupon.getId()));
         }
 
-        Set<OrderItem> orderItems = orderItemMapper.toEntity(orderDTO.getOrders())
-                .stream()
-                .peek(orderItem -> orderItem.setOrder(order))
-                .collect(Collectors.toSet());
-
+        order.getOrders().forEach(orderItem -> orderItem.setOrder(order));
         orderRepository.saveAndFlush(order);
-        orderItemRepository.saveAll(orderItems);
-
-        return order.getId();
+        entityManager.refresh(order);
+        return Optional.of(order);
     }
 }

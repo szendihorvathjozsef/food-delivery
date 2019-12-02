@@ -57,7 +57,7 @@ public class Order implements Serializable {
     @Column(name = "updated_on")
     private Instant updatedOn = Instant.now();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
     @JsonIgnoreProperties("order")
     private Set<OrderItem> orders = new HashSet<>();
 

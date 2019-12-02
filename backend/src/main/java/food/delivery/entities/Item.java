@@ -60,7 +60,6 @@ public class Item implements Serializable {
             joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "allergen_name", referencedColumnName = "name")}
     )
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<ItemAllergen> allergens = new HashSet<>();
 

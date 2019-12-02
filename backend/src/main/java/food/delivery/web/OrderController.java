@@ -19,6 +19,7 @@ import food.delivery.websocket.NewOrderEventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/orders")
+@Transactional
 public class OrderController extends BaseController {
 
     private static final String ENTITY_NAME = "order";
@@ -122,14 +124,13 @@ public class OrderController extends BaseController {
             throw new BadRequestAlertException("A new order cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Long resultId = orderService.createNewOrder(order, coupons);
-
-        Optional<OrderDTO> result = Optional.of(orderRepository.findById(resultId))
+        Optional<OrderDTO> result = Optional.of(orderService.createNewOrder(order, coupons))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(o -> orderMapper.toDto(o, TimeZone.getDefault()));
 
         if ( result.isPresent() ) {
+            System.out.println(result.get());
             newOrderEventPublisher.publish(result.get());
             mailService.sendOrderMail(result.get().getUser(), result.get());
         }

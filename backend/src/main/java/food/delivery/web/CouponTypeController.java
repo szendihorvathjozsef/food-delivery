@@ -1,7 +1,9 @@
 package food.delivery.web;
 
+import food.delivery.entities.Coupon;
 import food.delivery.entities.CouponType;
 import food.delivery.exceptions.BadRequestAlertException;
+import food.delivery.repositories.CouponRepository;
 import food.delivery.repositories.CouponTypeRepository;
 import food.delivery.services.CouponService;
 import food.delivery.services.dto.CouponTypeDTO;
@@ -10,6 +12,7 @@ import food.delivery.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -28,11 +31,13 @@ public class CouponTypeController extends BaseController {
 
     private final CouponTypeMapper couponTypeMapper;
     private final CouponTypeRepository couponTypeRepository;
+    private final CouponRepository couponRepository;
     private final CouponService couponService;
 
-    public CouponTypeController(CouponTypeMapper couponTypeMapper, CouponTypeRepository couponTypeRepository, CouponService couponService) {
+    public CouponTypeController(CouponTypeMapper couponTypeMapper, CouponTypeRepository couponTypeRepository, CouponRepository couponRepository, CouponService couponService) {
         this.couponTypeMapper = couponTypeMapper;
         this.couponTypeRepository = couponTypeRepository;
+        this.couponRepository = couponRepository;
         this.couponService = couponService;
     }
 
@@ -62,6 +67,12 @@ public class CouponTypeController extends BaseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Coupon : {}", id);
+        List<Coupon> coupons = couponRepository.findAllByType_Id(id);
+
+        if (!CollectionUtils.isEmpty(coupons)) {
+            coupons.forEach(coupon -> coupon.setUser(null));
+            couponRepository.deleteAll(coupons);
+        }
         couponTypeRepository.deleteById(id);
         return ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(

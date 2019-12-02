@@ -29,7 +29,7 @@ public class OrderItem implements Serializable {
     @JsonIgnoreProperties("orders")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "item_id")
     private Item item;
 

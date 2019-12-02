@@ -91,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/**").permitAll()
-            /*.antMatchers("/authentication").permitAll()
+            .antMatchers("/authentication").permitAll()
             .antMatchers("/register").permitAll()
             .antMatchers("/activate").permitAll()
             .antMatchers("/account/reset-password/init").permitAll()
@@ -108,7 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/coupons/active").authenticated()
             .antMatchers("/coupons/activate").authenticated()
             .antMatchers("/coupons/unused").authenticated()
-            .antMatchers("/**").hasAuthority("ADMINISTRATOR")*/
+            .antMatchers("/**").hasAuthority("ADMINISTRATOR")
         .and()
             .httpBasic()
         .and()
