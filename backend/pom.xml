@@ -35,7 +35,7 @@
         <logback.core.version>1.2.3</logback.core.version>
         <slf4j.api.version>1.7.25</slf4j.api.version>
         <io.json-webtoken>0.10.6</io.json-webtoken>
-        <mysql.connector.version>8.0.17</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <dockerfile.maven.plugin.version>1.4.10</dockerfile.maven.plugin.version>
         <zalanod.problem.spring.version>0.25.2</zalanod.problem.spring.version>
 
